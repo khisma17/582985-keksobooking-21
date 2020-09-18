@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [Эмиль Хисматуллин](https://up.htmlacademy.ru/javascript/21/user/582985).
-* Наставник: `Неизвестно`.
+* Наставник: [Роман Макаров](https://up.htmlacademy.ru/javascript/21/user/32781).
 
 ---
 
