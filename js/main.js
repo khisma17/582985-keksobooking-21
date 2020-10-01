@@ -44,19 +44,30 @@ const map = document.querySelector('.map');
 
 const getRandomValueFromRange = (minimumValue, maximumValue) => Math.floor(Math.random() * (maximumValue - minimumValue + 1) + minimumValue);
 
-const getRandomArrayElement = (array) => array[getRandomValueFromRange(0, array.length - 1)];
+const getRandomArrayElement = (array) => {
+  const randomIndex = getRandomValueFromRange(0, array.length - 1);
 
-const shuffleArray = (array) => {
-  for (let i = array.length - 1; i > 0; i -= 1) {
-    let j = getRandomValueFromRange(0, i);
-    let t = array[i];
-    array[i] = array[j];
-    array[j] = t;
-  }
-  return array;
+  return array[randomIndex];
 };
 
-const takeRandomNumberOfArrayElements = (array) => shuffleArray(array).slice(0, getRandomValueFromRange(0, array.length - 1));
+const shuffleArray = (array) => {
+  const newArray = array.slice();
+  for (let i = newArray.length - 1; i > 0; i -= 1) {
+    const j = getRandomValueFromRange(0, i);
+    const t = newArray[i];
+    newArray[i] = newArray[j];
+    newArray[j] = t;
+  }
+  return newArray;
+};
+
+const takeRandomNumberOfArrayElements = (array) => {
+  const randomIndex = getRandomValueFromRange(0, array.length - 1);
+
+  const shuffledArray = shuffleArray(array);
+
+  return shuffledArray.slice(0, randomIndex);
+};
 
 const generatePin = (pinNumber) => {
   const pin = {};
@@ -80,8 +91,6 @@ const generatePin = (pinNumber) => {
   return pin;
 };
 
-map.classList.remove('map--faded');
-
 const generatePinsList = (numberOfPins) => {
   const pins = [];
   for (let i = 0; i < numberOfPins; i += 1) {
@@ -89,8 +98,6 @@ const generatePinsList = (numberOfPins) => {
   }
   return pins;
 };
-
-const pins = generatePinsList(NUMBER_OF_PINS);
 
 const createPin = (pinData) => {
   const pinElement = pinTemplate.cloneNode(true);
@@ -105,9 +112,17 @@ const createPin = (pinData) => {
 const createPinsFragment = (pinsData, numberOfPins) => {
   const fragment = document.createDocumentFragment();
   for (let i = 0; i < numberOfPins; i += 1) {
-    fragment.appendChild(createPin(pinsData[i]));
+    const pin = createPin(pinsData[i]);
+
+    fragment.appendChild(pin);
   }
   return fragment;
 };
 
-pinsList.appendChild(createPinsFragment(pins, NUMBER_OF_PINS));
+map.classList.remove('map--faded');
+
+const pins = generatePinsList(NUMBER_OF_PINS);
+
+const pinsFragment = createPinsFragment(pins, NUMBER_OF_PINS);
+
+pinsList.appendChild(pinsFragment);
