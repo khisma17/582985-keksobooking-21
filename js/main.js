@@ -14,6 +14,9 @@ const OFFER_TITLES = [
 
 const OFFER_TYPES = ['palace', 'flat', 'house', 'bungalow'];
 
+const ROOMS = ['1 комната', '2 комнаты', '3 комнаты', '100 комнат'];
+const GUESTS = ['для 1 гостя', 'для 2 гостей', 'для 3 гостей', 'не для гостей'];
+
 const CHECKIN_TIMES = ['12:00', '13:00', '14:00'];
 const CHECKOUT_TIMES = ['12:00', '13:00', '14:00'];
 const FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
@@ -37,17 +40,41 @@ const PHOTOS = [
 
 const NUMBER_OF_PINS = 8;
 
+const PIN_WIDTH = 50;
+const PIN_HEIGHT = 70;
+
+const MAIN_PIN_INACTIVE_X = 570 + 65 / 2;
+const MAIN_PIN_INACTIVE_Y = 375 + 65 / 2;
+
 const pinsList = document.querySelector('.map__pins');
 const pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
+const mainPin = document.querySelector('.map__pin--main');
 
 const map = document.querySelector('.map');
 
-const getRandomValueFromRange = (minimumValue, maximumValue) => Math.floor(Math.random() * (maximumValue - minimumValue + 1) + minimumValue);
+const form = document.querySelector('.ad-form');
+const formFieldsets = form.querySelectorAll('fieldset');
+const filters = document.querySelector('.map__filters');
+const filtersFieldsets = filters.querySelectorAll('select, fieldset');
 
-const getRandomArrayElement = (array) => {
-  const randomIndex = getRandomValueFromRange(0, array.length - 1);
+const addressInput = document.querySelector('#address');
 
-  return array[randomIndex];
+const guestsInput = document.querySelector('#capacity');
+const roomsInput = document.querySelector('#room_number');
+
+const mainPinX = MAIN_PIN_INACTIVE_X + PIN_WIDTH / 2;
+const mainPinY = MAIN_PIN_INACTIVE_Y + PIN_HEIGHT;
+
+const setInactivePageMode = () => {
+  form.classList.add('ad-form--disabled');
+
+  for (let i = 0; i < formFieldsets.length; i += 1) {
+    formFieldsets[i].setAttribute('disabled', '');
+  }
+
+  for (let i = 0; i < filtersFieldsets.length; i += 1) {
+    filtersFieldsets[i].setAttribute('disabled', '');
+  }
 };
 
 const shuffleArray = (array) => {
@@ -69,6 +96,89 @@ const takeRandomNumberOfArrayElements = (array) => {
   return shuffledArray.slice(0, randomIndex);
 };
 
+// Активация страницы
+
+const setAddress = () => {
+  addressInput.setAttribute('value', `${Math.round(mainPinX)}, ${Math.round(mainPinY)}`);
+};
+
+const onInactiveMainPinClick = (evt) => {
+  if (evt.button === 0) {
+    activatePage();
+    setAddress();
+  }
+};
+
+const onInactiveMainEnterPress = (evt) => {
+  if (evt.key === 'Enter') {
+    activatePage();
+    setAddress();
+  }
+};
+
+mainPin.addEventListener('mousedown', onInactiveMainPinClick);
+
+mainPin.addEventListener('keydown', onInactiveMainEnterPress);
+
+const activatePage = () => {
+  map.classList.remove('map--faded');
+  form.classList.remove('ad-form--disabled');
+
+  for (let i = 0; i < formFieldsets.length; i += 1) {
+    formFieldsets[i].removeAttribute('disabled');
+  }
+
+  for (let i = 0; i < filtersFieldsets.length; i += 1) {
+    filtersFieldsets[i].removeAttribute('disabled');
+  }
+
+  mainPin.removeEventListener('mousedown', onInactiveMainPinClick);
+  mainPin.removeEventListener('keydown', onInactiveMainEnterPress);
+};
+
+// Валидация соответствия между количеством комнат и гостей
+
+const checkGuestNumberValidity = () => {
+  if (roomsInput.value === '1' && guestsInput.value !== '1') {
+    guestsInput.setCustomValidity('Выбранное количество гостей не подходит под количество комнат');
+    guestsInput.reportValidity();
+  } else if (roomsInput.value === '2' && (guestsInput.value === '3' || guestsInput.value === '0')) {
+    guestsInput.setCustomValidity('Выбранное количество гостей не подходит под количество комнат');
+    guestsInput.reportValidity();
+  } else if (roomsInput.value === '3' && guestsInput.value === '0') {
+    guestsInput.setCustomValidity('Выбранное количество гостей не подходит под количество комнат');
+    guestsInput.reportValidity();
+  } else if (roomsInput.value === '100' && guestsInput.value !== '0') {
+    guestsInput.setCustomValidity('Выбранное количество гостей не подходит под количество комнат');
+    guestsInput.reportValidity();
+  } else {
+    guestsInput.setCustomValidity('');
+    guestsInput.reportValidity();
+  }
+};
+
+document.addEventListener('DOMContentLoaded', function () {
+  checkGuestNumberValidity();
+});
+
+guestsInput.addEventListener('input', function () {
+  checkGuestNumberValidity();
+});
+
+roomsInput.addEventListener('input', function () {
+  checkGuestNumberValidity();
+});
+
+const getRandomValueFromRange = (minimumValue, maximumValue) => Math.floor(Math.random() * (maximumValue - minimumValue + 1) + minimumValue);
+
+const getRandomArrayElement = (array) => {
+  const randomIndex = getRandomValueFromRange(0, array.length - 1);
+
+  return array[randomIndex];
+};
+
+// Заполнение списка похожих объявлений и отображение пинов
+
 const generatePin = (pinNumber) => {
   const pin = {};
   pin.author = {};
@@ -78,8 +188,8 @@ const generatePin = (pinNumber) => {
   pin.offer.title = getRandomArrayElement(OFFER_TITLES);
   pin.offer.price = getRandomValueFromRange(0, 20000);
   pin.offer.type = getRandomArrayElement(OFFER_TYPES);
-  pin.offer.rooms = getRandomValueFromRange(1, 5);
-  pin.offer.guests = getRandomValueFromRange(1, 10);
+  pin.offer.rooms = getRandomArrayElement(ROOMS);
+  pin.offer.guests = getRandomArrayElement(GUESTS);
   pin.offer.checkin = getRandomArrayElement(CHECKIN_TIMES);
   pin.offer.checkout = getRandomArrayElement(CHECKOUT_TIMES);
   pin.offer.features = takeRandomNumberOfArrayElements(FEATURES);
@@ -103,7 +213,7 @@ const createPin = (pinData) => {
   const pinElement = pinTemplate.cloneNode(true);
   const pinElementImage = pinElement.querySelector('img');
 
-  pinElement.setAttribute('style', `left: ${pinData.location.x + 25}px; top: ${pinData.location.y + 70}px;`);
+  pinElement.setAttribute('style', `left: ${pinData.location.x + PIN_WIDTH / 2}px; top: ${pinData.location.y + PIN_HEIGHT}px;`);
   pinElementImage.setAttribute('src', `${pinData.author.avatar}`);
   pinElementImage.setAttribute('alt', `${pinData.offer.title}`);
   return pinElement;
@@ -119,7 +229,7 @@ const createPinsFragment = (pinsData, numberOfPins) => {
   return fragment;
 };
 
-map.classList.remove('map--faded');
+setInactivePageMode();
 
 const pins = generatePinsList(NUMBER_OF_PINS);
 
