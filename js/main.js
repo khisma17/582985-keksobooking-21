@@ -116,8 +116,8 @@ const createPin = (pinData) => {
   const pinElementImage = pinElement.querySelector('img');
 
   pinElement.setAttribute('style', `left: ${pinData.location.x + 25}px; top: ${pinData.location.y + 70}px;`);
-  pinElementImage.setAttribute('src', `${pinData.author.avatar}`);
-  pinElementImage.setAttribute('alt', `${pinData.offer.title}`);
+  pinElementImage.setAttribute('src', pinData.author.avatar);
+  pinElementImage.setAttribute('alt', pinData.offer.title);
   return pinElement;
 };
 
@@ -131,7 +131,24 @@ const createPinsFragment = (pinsData, numberOfPins) => {
   return fragment;
 };
 
-const createCardPopup = (cardData) => {
+const createFeaturesElement = (cardData, feature) => {
+  const featuresElement = document.createElement('li');
+  featuresElement.classList.add('popup__feature');
+  featuresElement.classList.add(`popup__feature--${cardData.offer.features[feature]}`);
+  return featuresElement;
+};
+
+const createPhotosElement = (cardData, photo) => {
+  const photosElement = document.createElement('img');
+  photosElement.src = cardData.offer.photos[photo];
+  photosElement.classList.add('popup__photo');
+  photosElement.width = '45';
+  photosElement.height = '40';
+  photosElement.alt = 'Фотография жилья';
+  return photosElement;
+};
+
+const createCard = (cardData) => {
   const cardElement = cardTemplate.cloneNode(true);
   const cardElementTitle = cardElement.querySelector('.popup__title');
   const cardElementAddress = cardElement.querySelector('.popup__text--address');
@@ -145,26 +162,28 @@ const createCardPopup = (cardData) => {
   const cardElementAvatar = cardElement.querySelector('.popup__avatar');
   const offerType = cardData.offer.type;
 
-  cardElementTitle.textContent = `${cardData.offer.title}`;
-  cardElementAddress.textContent = `${cardData.offer.address}`;
+  cardElementTitle.textContent = cardData.offer.title;
+  cardElementAddress.textContent = cardData.offer.address;
   cardElementPrice.textContent = `${cardData.offer.price}₽/ночь`;
-  cardElementType.textContent = `${OFFER_TYPES_MAPPING[offerType]}`;
+  cardElementType.textContent = OFFER_TYPES_MAPPING[offerType];
   cardElementCapacity.textContent = `${cardData.offer.rooms} комнаты для ${cardData.offer.guests} гостей`;
   cardElementTime.textContent = `Заезд после ${cardData.offer.checkin}, выезд до ${cardData.offer.checkout}`;
 
   cardElementFeatures.innerHTML = '';
   for (let i = 0; i < cardData.offer.features.length; i += 1) {
-    cardElementFeatures.insertAdjacentHTML('beforeend', `<li class="popup__feature popup__feature--${cardData.offer.features[i]}"></li>`);
+    const featuresElement = createFeaturesElement(cardData, i);
+    cardElementFeatures.appendChild(featuresElement);
   }
 
-  cardElementDescription.textContent = `${cardData.offer.description}`;
+  cardElementDescription.textContent = cardData.offer.description;
 
   cardElementPhotos.innerHTML = '';
   for (let i = 0; i < cardData.offer.photos.length; i += 1) {
-    cardElementPhotos.insertAdjacentHTML('beforeend', `<img src="${cardData.offer.photos[i]}" class="popup__photo" width="45" height="40" alt="Фотография жилья">`);
+    const photosElement = createPhotosElement(cardData, i);
+    cardElementPhotos.appendChild(photosElement);
   }
 
-  cardElementAvatar.setAttribute('src', `${cardData.author.avatar}`);
+  cardElementAvatar.setAttribute('src', cardData.author.avatar);
 
   return cardElement;
 };
@@ -177,6 +196,6 @@ const pinsFragment = createPinsFragment(pins, NUMBER_OF_PINS);
 
 pinsList.appendChild(pinsFragment);
 
-const card = createCardPopup(pins[currentPin]);
+const card = createCard(pins[currentPin]);
 
 map.insertBefore(card, mapFilters);
