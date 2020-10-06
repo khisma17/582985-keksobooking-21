@@ -1,79 +1,83 @@
 'use strict';
 
 const OFFER_TITLES = [
-  'Чулан под лестницей',
-  'Здоровенный особняк в пригороде',
-  '東京の中心部にある素敵で居心地の良いアパート',
-  'Домик на дереве', 'Комфортные апартаменты в окрестностях императорского дворца',
-  'Палатка в тени сакуры',
-  'удобный 2 спальня плоский япония вниз город',
-  'Нежилое помещение',
-  'Комната в общежитии',
-  'Номер в капсульном отеле'
+  `Чулан под лестницей`,
+  `Здоровенный особняк в пригороде`,
+  `東京の中心部にある素敵で居心地の良いアパート`,
+  `Домик на дереве`, `Комфортные апартаменты в окрестностях императорского дворца`,
+  `Палатка в тени сакуры`,
+  `удобный 2 спальня плоский япония вниз город`,
+  `Нежилое помещение`,
+  `Комната в общежитии`,
+  `Номер в капсульном отеле`
 ];
 
-const OFFER_TYPES = ['palace', 'flat', 'house', 'bungalow'];
+const OFFER_TYPES = [`palace`, `flat`, `house`, `bungalow`];
 
-const ROOMS = ['1 комната', '2 комнаты', '3 комнаты', '100 комнат'];
-const GUESTS = ['для 1 гостя', 'для 2 гостей', 'для 3 гостей', 'не для гостей'];
+const ROOMS = [`1 комната`, `2 комнаты`, `3 комнаты`, `100 комнат`];
+const GUESTS = [`для 1 гостя`, `для 2 гостей`, `для 3 гостей`, `не для гостей`];
 
-const CHECKIN_TIMES = ['12:00', '13:00', '14:00'];
-const CHECKOUT_TIMES = ['12:00', '13:00', '14:00'];
-const FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
+const CHECKIN_TIMES = [`12:00`, `13:00`, `14:00`];
+const CHECKOUT_TIMES = [`12:00`, `13:00`, `14:00`];
+const FEATURES = [`wifi`, `dishwasher`, `parking`, `washer`, `elevator`, `conditioner`];
 
 const DESCRIPTIONS = [
-  '4 минуты пешком от станции Mikawashima, 12 минут пешком от станции Nippori',
-  'Отель находится в 6 минутах ходьбы от станции Син-Окубо, недалеко от Корейского города и различных достопримечательностей.',
-  'Здесь рекомендуется останавливаться при большом количестве людей, например путешествовать с семьей и друзьями!',
-  'Комната квартиры 4 эт. И у нас нет лифта ....! Так что вам нужно использовать лестницу. (+ _ +)',
-  'Добро пожаловать в Токио! Это общий номер гостиничного типа, и он подходит для путешествий в одиночку. Отель оформлен в японских традициях.',
-  'Концепция «Маленькой Японии», соединяющая мир с местными жителями. Гости могут получить незабываемые впечатления о Японии в нашем кафе и баре на первом этаже.',
-  'Смешанный номер-капсула для гостей женского и мужского пола. Каждая кровать отделена стеной и занавеской.',
-  'Оставайся в Асакусе! Работайте в Асакусе! Почему бы вам не насладиться Асакусой, остановившись в вновь открывшемся компактном отеле?'
+  `4 минуты пешком от станции Mikawashima, 12 минут пешком от станции Nippori`,
+  `Отель находится в 6 минутах ходьбы от станции Син-Окубо, недалеко от Корейского города и различных достопримечательностей.`,
+  `Здесь рекомендуется останавливаться при большом количестве людей, например путешествовать с семьей и друзьями!`,
+  `Комната квартиры 4 эт. И у нас нет лифта ....! Так что вам нужно использовать лестницу. (+ _ +)`,
+  `Добро пожаловать в Токио! Это общий номер гостиничного типа, и он подходит для путешествий в одиночку. Отель оформлен в японских традициях.`,
+  `Концепция «Маленькой Японии», соединяющая мир с местными жителями. Гости могут получить незабываемые впечатления о Японии в нашем кафе и баре на первом этаже.`,
+  `Смешанный номер-капсула для гостей женского и мужского пола. Каждая кровать отделена стеной и занавеской.`,
+  `Оставайся в Асакусе! Работайте в Асакусе! Почему бы вам не насладиться Асакусой, остановившись в вновь открывшемся компактном отеле?`
 ];
 
 const PHOTOS = [
-  'http://o0.github.io/assets/images/tokyo/hotel1.jpg',
-  'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
-  'http://o0.github.io/assets/images/tokyo/hotel3.jpg'
+  `http://o0.github.io/assets/images/tokyo/hotel1.jpg`,
+  `http://o0.github.io/assets/images/tokyo/hotel2.jpg`,
+  `http://o0.github.io/assets/images/tokyo/hotel3.jpg`
 ];
 
 const NUMBER_OF_PINS = 8;
 
-const PIN_WIDTH = 50;
-const PIN_HEIGHT = 70;
+const MAIN_MOUSE_BUTTON = 0;
 
-const MAIN_PIN_INACTIVE_X = 570 + 65 / 2;
-const MAIN_PIN_INACTIVE_Y = 375 + 65 / 2;
+const pinsList = document.querySelector(`.map__pins`);
+const pinTemplate = document.querySelector(`#pin`).content.querySelector(`.map__pin`);
+const mainPin = document.querySelector(`.map__pin--main`);
 
-const pinsList = document.querySelector('.map__pins');
-const pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
-const mainPin = document.querySelector('.map__pin--main');
+const PIN_WIDTH = mainPin.offsetWidth;
+const PIN_HEIGHT = mainPin.offsetHeight;
 
-const map = document.querySelector('.map');
+const PIN_HEIGHT_ACTIVE = PIN_HEIGHT + 22; // 22 - длина острого конца, он описан псевдоэлементом - не придумал как его вытащить из DOM
 
-const form = document.querySelector('.ad-form');
-const formFieldsets = form.querySelectorAll('fieldset');
-const filters = document.querySelector('.map__filters');
-const filtersFieldsets = filters.querySelectorAll('select, fieldset');
+const MAIN_PIN_INACTIVE_X = mainPin.offsetLeft + PIN_WIDTH / 2;
+const MAIN_PIN_INACTIVE_Y = mainPin.offsetTop + PIN_HEIGHT / 2;
 
-const addressInput = document.querySelector('#address');
+const map = document.querySelector(`.map`);
 
-const guestsInput = document.querySelector('#capacity');
-const roomsInput = document.querySelector('#room_number');
+const form = document.querySelector(`.ad-form`);
+const formFieldsets = form.querySelectorAll(`fieldset`);
+const filters = document.querySelector(`.map__filters`);
+const filtersFieldsets = filters.querySelectorAll(`select, fieldset`);
 
-const mainPinX = MAIN_PIN_INACTIVE_X + PIN_WIDTH / 2;
-const mainPinY = MAIN_PIN_INACTIVE_Y + PIN_HEIGHT;
+const addressInput = document.querySelector(`#address`);
+
+const guestsInput = document.querySelector(`#capacity`);
+const roomsInput = document.querySelector(`#room_number`);
+
+const mainPinX = MAIN_PIN_INACTIVE_X;
+const mainPinY = mainPin.offsetTop + PIN_HEIGHT_ACTIVE;
 
 const setInactivePageMode = () => {
-  form.classList.add('ad-form--disabled');
+  form.classList.add(`ad-form--disabled`);
 
   for (let i = 0; i < formFieldsets.length; i += 1) {
-    formFieldsets[i].setAttribute('disabled', '');
+    formFieldsets[i].setAttribute(`disabled`, ``);
   }
 
   for (let i = 0; i < filtersFieldsets.length; i += 1) {
-    filtersFieldsets[i].setAttribute('disabled', '');
+    filtersFieldsets[i].setAttribute(`disabled`, ``);
   }
 };
 
@@ -98,74 +102,74 @@ const takeRandomNumberOfArrayElements = (array) => {
 
 // Активация страницы
 
-const setAddress = () => {
-  addressInput.setAttribute('value', `${Math.round(mainPinX)}, ${Math.round(mainPinY)}`);
+const setAddress = (x, y) => {
+  addressInput.setAttribute(`value`, `${Math.round(x)}, ${Math.round(y)}`);
 };
 
 const onInactiveMainPinClick = (evt) => {
-  if (evt.button === 0) {
+  if (evt.button === MAIN_MOUSE_BUTTON) {
     activatePage();
-    setAddress();
+    setAddress(mainPinX, mainPinY);
   }
 };
 
 const onInactiveMainEnterPress = (evt) => {
-  if (evt.key === 'Enter') {
+  if (evt.key === `Enter`) {
     activatePage();
-    setAddress();
+    setAddress(mainPinX, mainPinY);
   }
 };
 
-mainPin.addEventListener('mousedown', onInactiveMainPinClick);
+mainPin.addEventListener(`mousedown`, onInactiveMainPinClick);
 
-mainPin.addEventListener('keydown', onInactiveMainEnterPress);
+mainPin.addEventListener(`keydown`, onInactiveMainEnterPress);
 
 const activatePage = () => {
-  map.classList.remove('map--faded');
-  form.classList.remove('ad-form--disabled');
+  map.classList.remove(`map--faded`);
+  form.classList.remove(`ad-form--disabled`);
 
   for (let i = 0; i < formFieldsets.length; i += 1) {
-    formFieldsets[i].removeAttribute('disabled');
+    formFieldsets[i].removeAttribute(`disabled`);
   }
 
   for (let i = 0; i < filtersFieldsets.length; i += 1) {
-    filtersFieldsets[i].removeAttribute('disabled');
+    filtersFieldsets[i].removeAttribute(`disabled`);
   }
 
-  mainPin.removeEventListener('mousedown', onInactiveMainPinClick);
-  mainPin.removeEventListener('keydown', onInactiveMainEnterPress);
+  mainPin.removeEventListener(`mousedown`, onInactiveMainPinClick);
+  mainPin.removeEventListener(`keydown`, onInactiveMainEnterPress);
 };
 
 // Валидация соответствия между количеством комнат и гостей
 
 const checkGuestNumberValidity = () => {
-  if (roomsInput.value === '1' && guestsInput.value !== '1') {
-    guestsInput.setCustomValidity('Выбранное количество гостей не подходит под количество комнат');
+  if (roomsInput.value === `1` && guestsInput.value !== `1`) {
+    guestsInput.setCustomValidity(`Выбранное количество гостей не подходит под количество комнат`);
     guestsInput.reportValidity();
-  } else if (roomsInput.value === '2' && (guestsInput.value === '3' || guestsInput.value === '0')) {
-    guestsInput.setCustomValidity('Выбранное количество гостей не подходит под количество комнат');
+  } else if (roomsInput.value === `2` && (guestsInput.value === `3` || guestsInput.value === `0`)) {
+    guestsInput.setCustomValidity(`Выбранное количество гостей не подходит под количество комнат`);
     guestsInput.reportValidity();
-  } else if (roomsInput.value === '3' && guestsInput.value === '0') {
-    guestsInput.setCustomValidity('Выбранное количество гостей не подходит под количество комнат');
+  } else if (roomsInput.value === `3` && guestsInput.value === `0`) {
+    guestsInput.setCustomValidity(`Выбранное количество гостей не подходит под количество комнат`);
     guestsInput.reportValidity();
-  } else if (roomsInput.value === '100' && guestsInput.value !== '0') {
-    guestsInput.setCustomValidity('Выбранное количество гостей не подходит под количество комнат');
+  } else if (roomsInput.value === `100` && guestsInput.value !== `0`) {
+    guestsInput.setCustomValidity(`Выбранное количество гостей не подходит под количество комнат`);
     guestsInput.reportValidity();
   } else {
-    guestsInput.setCustomValidity('');
+    guestsInput.setCustomValidity(``);
     guestsInput.reportValidity();
   }
 };
 
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener(`DOMContentLoaded`, function () {
   checkGuestNumberValidity();
 });
 
-guestsInput.addEventListener('input', function () {
+guestsInput.addEventListener(`input`, function () {
   checkGuestNumberValidity();
 });
 
-roomsInput.addEventListener('input', function () {
+roomsInput.addEventListener(`input`, function () {
   checkGuestNumberValidity();
 });
 
@@ -211,11 +215,11 @@ const generatePinsList = (numberOfPins) => {
 
 const createPin = (pinData) => {
   const pinElement = pinTemplate.cloneNode(true);
-  const pinElementImage = pinElement.querySelector('img');
+  const pinElementImage = pinElement.querySelector(`img`);
 
-  pinElement.setAttribute('style', `left: ${pinData.location.x + PIN_WIDTH / 2}px; top: ${pinData.location.y + PIN_HEIGHT}px;`);
-  pinElementImage.setAttribute('src', `${pinData.author.avatar}`);
-  pinElementImage.setAttribute('alt', `${pinData.offer.title}`);
+  pinElement.setAttribute(`style`, `left: ${pinData.location.x + PIN_WIDTH / 2}px; top: ${pinData.location.y + PIN_HEIGHT}px;`);
+  pinElementImage.setAttribute(`src`, `${pinData.author.avatar}`);
+  pinElementImage.setAttribute(`alt`, `${pinData.offer.title}`);
   return pinElement;
 };
 
@@ -228,6 +232,8 @@ const createPinsFragment = (pinsData, numberOfPins) => {
   }
   return fragment;
 };
+
+addressInput.setAttribute(`value`, `${Math.round(MAIN_PIN_INACTIVE_X)}, ${Math.round(MAIN_PIN_INACTIVE_Y)}`);
 
 setInactivePageMode();
 
