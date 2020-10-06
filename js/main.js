@@ -307,8 +307,6 @@ const createCard = (cardData) => {
   return cardElement;
 };
 
-map.classList.remove(`map--faded`);
-
 const pins = generatePinsList(NUMBER_OF_PINS);
 
 const pinsFragment = createPinsFragment(pins, NUMBER_OF_PINS);
