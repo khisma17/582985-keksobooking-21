@@ -12,7 +12,7 @@
   const PIN_WIDTH = mainPin.offsetWidth;
   const PIN_HEIGHT = mainPin.offsetHeight;
 
-  const PIN_HEIGHT_ACTIVE = PIN_HEIGHT + 22; // 22 - длина острого конца, он описан псевдоэлементом - не придумал как его вытащить из DOM
+  const PIN_HEIGHT_ACTIVE = PIN_HEIGHT + 22;
 
   const MAIN_PIN_INACTIVE_X = mainPin.offsetLeft + PIN_WIDTH / 2;
   const MAIN_PIN_INACTIVE_Y = mainPin.offsetTop + PIN_HEIGHT / 2;
