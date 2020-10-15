@@ -1,32 +1,31 @@
 'use strict';
 
 (() => {
-  const getRandomValueFromRange = (minimumValue, maximumValue) => Math.floor(Math.random() * (maximumValue - minimumValue + 1) + minimumValue);
+  const guestsInput = document.querySelector(`#capacity`);
+  const roomsInput = document.querySelector(`#room_number`);
+  const mapFilters = document.querySelector(`.map__filters-container`);
+  const map = document.querySelector(`.map`);
+  const cardTemplate = document.querySelector(`#card`).content.querySelector(`.map__card`);
+  const pinTemplate = document.querySelector(`#pin`).content.querySelector(`.map__pin`);
+  const pinsList = document.querySelector(`.map__pins`);
 
-  const shuffleArray = (array) => {
-    const newArray = array.slice();
-    for (let i = newArray.length - 1; i > 0; i -= 1) {
-      const j = getRandomValueFromRange(0, i);
-      const t = newArray[i];
-      newArray[i] = newArray[j];
-      newArray[j] = t;
-    }
-    return newArray;
-  };
+  const loadURL = `https://21.javascript.pages.academy/keksobooking/data`;
 
-  const takeRandomNumberOfArrayElements = (array) => {
-    const randomIndex = getRandomValueFromRange(0, array.length - 1);
+  const renderElements = window.map.initiateRendering(pinTemplate, pinsList, cardTemplate, map, mapFilters);
 
-    const shuffledArray = shuffleArray(array);
+  document.addEventListener(`DOMContentLoaded`, function () {
+    window.form.checkGuestNumberValidity(guestsInput, roomsInput);
+  });
 
-    return shuffledArray.slice(0, randomIndex);
-  };
+  guestsInput.addEventListener(`input`, function () {
+    window.form.checkGuestNumberValidity(guestsInput, roomsInput);
+  });
 
-  const getRandomArrayElement = (array) => {
-    const randomIndex = getRandomValueFromRange(0, array.length - 1);
+  roomsInput.addEventListener(`input`, function () {
+    window.form.checkGuestNumberValidity(guestsInput, roomsInput);
+  });
 
-    return array[randomIndex];
-  };
+  const pageActivation = window.activation.initiatePageActivation(loadURL, renderElements, window.load.handleError);
 
-  window.main = {getRandomValueFromRange, takeRandomNumberOfArrayElements, getRandomArrayElement};
+  pageActivation.setInactivePageMode();
 })();

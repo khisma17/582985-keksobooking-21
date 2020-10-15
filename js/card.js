@@ -8,7 +8,8 @@
     palace: `Дворец`
   };
 
-  const cardTemplate = document.querySelector(`#card`).content.querySelector(`.map__card`);
+  const wordFormsRooms = [`комната`, `комнаты`, `комнат`];
+  const wordFormsGuests = [`гостя`, `гостей`];
 
   const createFeaturesElement = (cardData, feature) => {
     const featuresElement = document.createElement(`li`);
@@ -27,7 +28,26 @@
     return photosElement;
   };
 
-  const createCard = (cardData) => {
+  const getProperWordFormRooms = (n, wordForms) => {
+    const a = Math.abs(n) % 100;
+    const a1 = n % 10;
+    if (a > 10 && a < 20) {
+      return wordForms[2];
+    } if (a1 > 1 && a1 < 5) {
+      return wordForms[1];
+    } if (a1 === 1) {
+      return wordForms[0];
+    } return wordForms[2];
+  };
+
+  const getProperWordFormGuests = (n, wordForms) => {
+    const a = Math.abs(n) % 10;
+    if (a === 1) {
+      return wordForms[0];
+    } return wordForms[1];
+  };
+
+  const createCard = (cardTemplate, cardData) => {
     const cardElement = cardTemplate.cloneNode(true);
     const cardElementTitle = cardElement.querySelector(`.popup__title`);
     const cardElementAddress = cardElement.querySelector(`.popup__text--address`);
@@ -45,7 +65,7 @@
     cardElementAddress.textContent = cardData.offer.address;
     cardElementPrice.textContent = `${cardData.offer.price}₽/ночь`;
     cardElementType.textContent = OFFER_TYPES_MAPPING[offerType];
-    cardElementCapacity.textContent = `${cardData.offer.rooms} ${cardData.offer.guests}`;
+    cardElementCapacity.textContent = `${cardData.offer.rooms} ${getProperWordFormRooms(cardData.offer.rooms, wordFormsRooms)} для ${cardData.offer.guests} ${getProperWordFormGuests(cardData.offer.guests, wordFormsGuests)}`;
     cardElementTime.textContent = `Заезд после ${cardData.offer.checkin}, выезд до ${cardData.offer.checkout}`;
 
     cardElementFeatures.innerHTML = ``;
@@ -67,7 +87,5 @@
     return cardElement;
   };
 
-  const card = createCard(window.pin.pins[window.pin.currentPin]);
-
-  window.card = {card};
+  window.card = {createCard};
 })();
