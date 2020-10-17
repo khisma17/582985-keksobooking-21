@@ -28,23 +28,25 @@
     return photosElement;
   };
 
-  const getProperWordFormRooms = (n, wordForms) => {
-    const a = Math.abs(n) % 100;
-    const a1 = n % 10;
-    if (a > 10 && a < 20) {
+  const getProperWordFormRooms = (roomsNumber, wordForms) => {
+    const remainderOf100 = Math.abs(roomsNumber) % 100;
+    const remainderOf10 = roomsNumber % 10;
+    if (remainderOf100 > 10 && remainderOf100 < 20) {
       return wordForms[2];
-    } if (a1 > 1 && a1 < 5) {
+    } if (remainderOf10 > 1 && remainderOf10 < 5) {
       return wordForms[1];
-    } if (a1 === 1) {
+    } if (remainderOf10 === 1) {
       return wordForms[0];
-    } return wordForms[2];
+    }
+    return wordForms[2];
   };
 
-  const getProperWordFormGuests = (n, wordForms) => {
-    const a = Math.abs(n) % 10;
-    if (a === 1) {
+  const getProperWordFormGuests = (guestsNumber, wordForms) => {
+    const remainderOf10 = Math.abs(guestsNumber) % 10;
+    if (remainderOf10 === 1) {
       return wordForms[0];
-    } return wordForms[1];
+    }
+    return wordForms[1];
   };
 
   const createCard = (cardTemplate, cardData) => {
@@ -65,7 +67,11 @@
     cardElementAddress.textContent = cardData.offer.address;
     cardElementPrice.textContent = `${cardData.offer.price}₽/ночь`;
     cardElementType.textContent = OFFER_TYPES_MAPPING[offerType];
-    cardElementCapacity.textContent = `${cardData.offer.rooms} ${getProperWordFormRooms(cardData.offer.rooms, wordFormsRooms)} для ${cardData.offer.guests} ${getProperWordFormGuests(cardData.offer.guests, wordFormsGuests)}`;
+
+    const properRoomsName = getProperWordFormRooms(cardData.offer.rooms, wordFormsRooms);
+    const properGuestsName = getProperWordFormGuests(cardData.offer.guests, wordFormsGuests);
+    cardElementCapacity.textContent = `${cardData.offer.rooms} ${properRoomsName} для ${cardData.offer.guests} ${properGuestsName}`;
+
     cardElementTime.textContent = `Заезд после ${cardData.offer.checkin}, выезд до ${cardData.offer.checkout}`;
 
     cardElementFeatures.innerHTML = ``;

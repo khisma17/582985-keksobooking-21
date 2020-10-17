@@ -2,6 +2,7 @@
 
 (() => {
   const NUMBER_OF_PINS = 8;
+
   const currentPin = 0;
 
   const initiateRendering = (pinTemplate, pinsDestinationList, cardTemplate, mapElement, beforeElement) => {
