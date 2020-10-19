@@ -1,22 +1,25 @@
 'use strict';
 
 (() => {
-  const pinsList = document.querySelector(`.map__pins`);
-  const mapFilters = document.querySelector(`.map__filters-container`);
+  const NUMBER_OF_PINS = 8;
 
-  const createPinsFragment = (pinsData, numberOfPins) => {
-    const fragment = document.createDocumentFragment();
-    for (let i = 0; i < numberOfPins; i += 1) {
-      const pin = window.pin.createPin(pinsData[i]);
+  const currentPin = 0;
 
-      fragment.appendChild(pin);
-    }
-    return fragment;
+  const initiateRendering = (pinTemplate, pinsDestinationList, cardTemplate, mapElement, beforeElement) => {
+    const renderElements = (pins) => {
+      const fragment = document.createDocumentFragment();
+      for (let i = 0; i <= NUMBER_OF_PINS; i += 1) {
+        fragment.appendChild(window.pin.createPin(pinTemplate, pins[i]));
+      }
+      pinsDestinationList.appendChild(fragment);
+
+      const card = window.card.createCard(cardTemplate, pins[currentPin]);
+
+      mapElement.insertBefore(card, beforeElement);
+    };
+
+    return renderElements;
   };
 
-  const pinsFragment = createPinsFragment(window.pin.pins, window.pin.NUMBER_OF_PINS);
-
-  pinsList.appendChild(pinsFragment);
-
-  window.data.map.insertBefore(window.card.card, mapFilters);
+  window.map = {initiateRendering};
 })();

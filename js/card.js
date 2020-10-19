@@ -8,7 +8,8 @@
     palace: `Дворец`
   };
 
-  const cardTemplate = document.querySelector(`#card`).content.querySelector(`.map__card`);
+  const wordFormsRooms = [`комната`, `комнаты`, `комнат`];
+  const wordFormsGuests = [`гостя`, `гостей`];
 
   const createFeaturesElement = (cardData, feature) => {
     const featuresElement = document.createElement(`li`);
@@ -27,7 +28,28 @@
     return photosElement;
   };
 
-  const createCard = (cardData) => {
+  const getProperWordFormRooms = (roomsNumber, wordForms) => {
+    const remainderOf100 = Math.abs(roomsNumber) % 100;
+    const remainderOf10 = roomsNumber % 10;
+    if (remainderOf100 > 10 && remainderOf100 < 20) {
+      return wordForms[2];
+    } if (remainderOf10 > 1 && remainderOf10 < 5) {
+      return wordForms[1];
+    } if (remainderOf10 === 1) {
+      return wordForms[0];
+    }
+    return wordForms[2];
+  };
+
+  const getProperWordFormGuests = (guestsNumber, wordForms) => {
+    const remainderOf10 = Math.abs(guestsNumber) % 10;
+    if (remainderOf10 === 1) {
+      return wordForms[0];
+    }
+    return wordForms[1];
+  };
+
+  const createCard = (cardTemplate, cardData) => {
     const cardElement = cardTemplate.cloneNode(true);
     const cardElementTitle = cardElement.querySelector(`.popup__title`);
     const cardElementAddress = cardElement.querySelector(`.popup__text--address`);
@@ -45,7 +67,11 @@
     cardElementAddress.textContent = cardData.offer.address;
     cardElementPrice.textContent = `${cardData.offer.price}₽/ночь`;
     cardElementType.textContent = OFFER_TYPES_MAPPING[offerType];
-    cardElementCapacity.textContent = `${cardData.offer.rooms} ${cardData.offer.guests}`;
+
+    const properRoomsName = getProperWordFormRooms(cardData.offer.rooms, wordFormsRooms);
+    const properGuestsName = getProperWordFormGuests(cardData.offer.guests, wordFormsGuests);
+    cardElementCapacity.textContent = `${cardData.offer.rooms} ${properRoomsName} для ${cardData.offer.guests} ${properGuestsName}`;
+
     cardElementTime.textContent = `Заезд после ${cardData.offer.checkin}, выезд до ${cardData.offer.checkout}`;
 
     cardElementFeatures.innerHTML = ``;
@@ -67,7 +93,5 @@
     return cardElement;
   };
 
-  const card = createCard(window.pin.pins[window.pin.currentPin]);
-
-  window.card = {card};
+  window.card = {createCard};
 })();
