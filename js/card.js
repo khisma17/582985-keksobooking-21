@@ -8,8 +8,17 @@
     palace: `Дворец`
   };
 
-  const wordFormsRooms = [`комната`, `комнаты`, `комнат`];
-  const wordFormsGuests = [`гостя`, `гостей`];
+  const textMapping = {
+    rooms: {
+      singular: `комната`,
+      nominative: `комнаты`,
+      genitive: `комнат`
+    },
+    guests: {
+      singular: `гостя`,
+      plural: `гостей`
+    }
+  };
 
   const createFeaturesElement = (cardData, feature) => {
     const featuresElement = document.createElement(`li`);
@@ -28,25 +37,25 @@
     return photosElement;
   };
 
-  const getProperWordFormRooms = (roomsNumber, wordForms) => {
+  const getProperWordFormRooms = (roomsNumber, roomsMapping) => {
     const remainderOf100 = Math.abs(roomsNumber) % 100;
     const remainderOf10 = roomsNumber % 10;
     if (remainderOf100 > 10 && remainderOf100 < 20) {
-      return wordForms[2];
+      return roomsMapping.rooms.genitive;
     } if (remainderOf10 > 1 && remainderOf10 < 5) {
-      return wordForms[1];
+      return roomsMapping.rooms.nominative;
     } if (remainderOf10 === 1) {
-      return wordForms[0];
+      return roomsMapping.rooms.singular;
     }
-    return wordForms[2];
+    return roomsMapping.rooms.genitive;
   };
 
-  const getProperWordFormGuests = (guestsNumber, wordForms) => {
+  const getProperWordFormGuests = (guestsNumber, guestsMapping) => {
     const remainderOf10 = Math.abs(guestsNumber) % 10;
     if (remainderOf10 === 1) {
-      return wordForms[0];
+      return guestsMapping.guests.singular;
     }
-    return wordForms[1];
+    return guestsMapping.guests.plural;
   };
 
   const createCard = (cardTemplate, cardData) => {
@@ -68,8 +77,8 @@
     cardElementPrice.textContent = `${cardData.offer.price}₽/ночь`;
     cardElementType.textContent = OFFER_TYPES_MAPPING[offerType];
 
-    const properRoomsName = getProperWordFormRooms(cardData.offer.rooms, wordFormsRooms);
-    const properGuestsName = getProperWordFormGuests(cardData.offer.guests, wordFormsGuests);
+    const properRoomsName = getProperWordFormRooms(cardData.offer.rooms, textMapping);
+    const properGuestsName = getProperWordFormGuests(cardData.offer.guests, textMapping);
     cardElementCapacity.textContent = `${cardData.offer.rooms} ${properRoomsName} для ${cardData.offer.guests} ${properGuestsName}`;
 
     cardElementTime.textContent = `Заезд после ${cardData.offer.checkin}, выезд до ${cardData.offer.checkout}`;
