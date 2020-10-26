@@ -56,6 +56,17 @@
     document.body.insertAdjacentElement(`afterbegin`, node);
   };
 
+  const pageActivation = window.activation.getPageActivationHandlers(elements, loadURL, handleSuccess, handleError);
+
+  const pinFeatures = {
+    pinWidth: pageActivation.pinWidth,
+    pinHeight: pageActivation.pinHeightActive
+  };
+
+  const onMainPinClick = window.pinMovement.getPinMovementHandlers(elements, pinFeatures).onMainPinClick;
+
+  mainPin.addEventListener(`mousedown`, onMainPinClick);
+
   document.addEventListener(`DOMContentLoaded`, () => {
     window.form.checkGuestNumberValidity(guestsInput, roomsInput);
   });
@@ -71,8 +82,6 @@
   roomsInput.addEventListener(`input`, () => {
     window.form.checkGuestNumberValidity(guestsInput, roomsInput);
   });
-
-  const pageActivation = window.activation.getPageActivationHandlers(elements, loadURL, handleSuccess, handleError);
 
   pageActivation.setInactivePageMode();
 

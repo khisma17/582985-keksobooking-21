@@ -12,7 +12,7 @@
         ? MAX_NUMBER_OF_PINS
         : pins.length;
 
-      elements.pinsList.innerHTML = ``;
+      // elements.pinsList.innerHTML = ``;
 
       for (let i = 0; i < takeNumber; i += 1) {
         fragment.appendChild(window.pin.createPin(elements.pinTemplate, pins[i]));
