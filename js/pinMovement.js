@@ -4,6 +4,11 @@
   const MAIN_MOUSE_BUTTON = 0;
 
   const getPinMovementHandlers = (elements, pinFeatures) => {
+    let pointerPosition = {
+      left: null,
+      top: null
+    };
+
     const pinWidth = pinFeatures.pinWidth;
     const pinHeight = pinFeatures.pinHeight;
 
@@ -12,62 +17,44 @@
     const topBorder = 130;
     const bottomBorder = 630;
 
+    let addressValue = {
+      x: null,
+      y: null
+    };
+
+    const moveTo = (evt, draggable) => {
+      draggable.style.left = `${Math.max(leftBorder - pinWidth / 2, Math.min(evt.clientX - pointerPosition.left, rightBorder - pinWidth / 2))}px`;
+      draggable.style.top = `${Math.max(topBorder - pinHeight, Math.min(evt.clientY - pointerPosition.top, bottomBorder - pinHeight))}px`;
+    };
+
+    const setAddress = (draggable) => {
+      addressValue.x = draggable.offsetLeft + pinWidth / 2;
+      addressValue.y = draggable.offsetTop + pinHeight;
+      elements.addressInput.value = `${addressValue.x}, ${addressValue.y}`;
+    };
+
+    const onMouseMove = (evt) => {
+      evt.preventDefault();
+      moveTo(evt, elements.mainPin);
+      setAddress(elements.mainPin);
+    };
+
+    const onMouseUp = (evt) => {
+      evt.preventDefault();
+      document.removeEventListener(`mousemove`, onMouseMove);
+      document.removeEventListener(`mouseup`, onMouseUp);
+    };
+
     const onMainPinClick = (evt) => {
+      evt.preventDefault();
       if (evt.button === MAIN_MOUSE_BUTTON) {
-        let startCoordinates = {
-          x: evt.clientX,
-          y: evt.clientY
-        };
-
-        const onMouseMove = (moveEvt) => {
-          const shift = {
-            x: moveEvt.clientX - startCoordinates.x,
-            y: moveEvt.clientY - startCoordinates.y
-          };
-
-          startCoordinates = {
-            x: moveEvt.clientX,
-            y: moveEvt.clientY
-          };
-
-          const newCoordinates = {
-            x: elements.mainPin.offsetLeft + shift.x,
-            y: elements.mainPin.offsetTop + shift.y
-          };
-
-          const addressValue = {
-            x: newCoordinates.x + pinWidth / 2,
-            y: newCoordinates.y + pinHeight
-          };
-
-          if (addressValue.x < leftBorder) {
-            elements.mainPin.style.left = `${leftBorder - pinWidth / 2}px`;
-          } else if (addressValue.x > rightBorder) {
-            elements.mainPin.style.left = `${rightBorder - pinWidth / 2}px`;
-          } else {
-            elements.mainPin.style.left = `${newCoordinates.x}px`;
-          }
-
-          if (addressValue.y < topBorder) {
-            elements.mainPin.style.top = `${topBorder - pinHeight}px`;
-          } else if (addressValue.y > bottomBorder) {
-            elements.mainPin.style.top = `${bottomBorder - pinHeight}px`;
-          } else {
-            elements.mainPin.style.top = `${newCoordinates.y}px`;
-          }
-
-          elements.addressInput.value = `${addressValue.x}, ${addressValue.y}`;
-        };
-
-        const onMouseUp = () => {
-          document.removeEventListener(`mousemove`, onMouseMove);
-          document.removeEventListener(`mouseup`, onMouseUp);
-        };
-
+        pointerPosition.left = evt.clientX - elements.mainPin.offsetLeft;
+        pointerPosition.top = evt.clientY - elements.mainPin.offsetTop;
         document.addEventListener(`mousemove`, onMouseMove);
         document.addEventListener(`mouseup`, onMouseUp);
       }
     };
+
     return {onMainPinClick};
   };
   window.pinMovement = {getPinMovementHandlers};
