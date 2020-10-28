@@ -6,6 +6,7 @@
   const mapFilters = document.querySelector(`.map__filters-container`);
   const map = document.querySelector(`.map`);
   const cardTemplate = document.querySelector(`#card`).content.querySelector(`.map__card`);
+
   const pinTemplate = document.querySelector(`#pin`).content.querySelector(`.map__pin`);
   const pinsList = document.querySelector(`.map__pins`);
   const housingTypeFilter = document.querySelector(`#housing-type`);
@@ -16,31 +17,54 @@
   const filters = document.querySelector(`.map__filters`);
   const filtersFieldsets = filters.querySelectorAll(`select, input`);
   const addressInput = document.querySelector(`#address`);
+  const titleInput = document.querySelector(`#title`);
+  const housingTypeInput = document.querySelector(`#type`);
+  const priceInput = document.querySelector(`#price`);
+  const checkInInput = document.querySelector(`#timein`);
+  const checkOutInput = document.querySelector(`#timeout`);
+  const avatarInput = document.querySelector(`#avatar`);
+  const imageInput = document.querySelector(`#images`);
 
-  const elements = {mainPin, map, form, formFieldsets, filtersFieldsets, addressInput, pinTemplate, pinsList, cardTemplate, mapFilters};
+  const elements = {mainPin, map, form, formFieldsets, filtersFieldsets, addressInput, pinTemplate, pinsList, cardTemplate, mapFilters, guestsInput, roomsInput, titleInput, housingTypeInput, priceInput, checkInInput, checkOutInput};
 
   const loadURL = `https://21.javascript.pages.academy/keksobooking/data`;
 
   let pins = [];
 
-  const renderPins = window.map.getRenderingHandlers(elements).renderPins;
-  const renderCards = window.map.getRenderingHandlers(elements).renderCards;
-
   const handleSuccess = (data) => {
     pins = data;
     updatePins();
-    renderCards(pins);
     window.activation.activateFilters(elements);
   };
 
-  const updatePins = () => {
-    const sameHousingTypePins = pins.filter((pin) => {
-      return pin.offer.type === housingTypeFilter.value;
+  const clearPins = () => {
+    const pinElements = pinsList.querySelectorAll(`.map__pin`);
+    for (let i = 1; i < pinElements.length; i += 1) {
+      pinElements[i].remove();
+    }
+  };
+
+  const clearCards = () => {
+    const cards = document.querySelectorAll(`.map .map__card`);
+    cards.forEach((element) => {
+      element.remove();
     });
-    if (housingTypeFilter.value !== `any`) {
-      renderPins(sameHousingTypePins);
-    } else {
+  };
+
+  const functions = {clearCards};
+
+  const renderPins = window.map.getRenderingHandlers(elements, functions).renderPins;
+
+  const updatePins = () => {
+    clearPins();
+    if (housingTypeFilter.value === `any`) {
       renderPins(pins);
+      return;
+    } else {
+      const sameHousingTypePins = pins.filter((pin) => {
+        return pin.offer.type === housingTypeFilter.value;
+      });
+      renderPins(sameHousingTypePins);
     }
   };
 
@@ -56,8 +80,6 @@
     document.body.insertAdjacentElement(`afterbegin`, node);
   };
 
-  const pageActivation = window.activation.getPageActivationHandlers(elements, loadURL, handleSuccess, handleError);
-
   const pinFeatures = {
     pinWidth: pageActivation.pinWidth,
     pinHeight: pageActivation.pinHeightActive
@@ -66,9 +88,17 @@
   const onMainPinClick = window.pinMovement.getPinMovementHandlers(elements, pinFeatures).onMainPinClick;
 
   mainPin.addEventListener(`mousedown`, onMainPinClick);
+  
+  const checkGuestNumberValidity = window.form.getValidityCheckHandlers(elements).checkGuestNumberValidity;
+  const validateTitle = window.form.getValidityCheckHandlers(elements).validateTitle;
+  const validateHousingType = window.form.getValidityCheckHandlers(elements).validateHousingType;
+  const validatePrice = window.form.getValidityCheckHandlers(elements).validatePrice;
+  const validateCheckIn = window.form.getValidityCheckHandlers(elements).validateCheckIn;
+  const validateCheckOut = window.form.getValidityCheckHandlers(elements).validateCheckOut;
+  const validateImage = window.form.getValidityCheckHandlers(elements).validateImage;
 
   document.addEventListener(`DOMContentLoaded`, () => {
-    window.form.checkGuestNumberValidity(guestsInput, roomsInput);
+    checkGuestNumberValidity();
   });
 
   housingTypeFilter.addEventListener(`input`, () => {
@@ -76,12 +106,31 @@
   });
 
   guestsInput.addEventListener(`input`, () => {
-    window.form.checkGuestNumberValidity(guestsInput, roomsInput);
+    checkGuestNumberValidity();
   });
 
   roomsInput.addEventListener(`input`, () => {
-    window.form.checkGuestNumberValidity(guestsInput, roomsInput);
+    checkGuestNumberValidity();
   });
+
+  housingTypeInput.addEventListener(`input`, () => {
+    validateHousingType();
+  });
+
+  checkInInput.addEventListener(`input`, () => {
+    validateCheckIn();
+  });
+
+  checkOutInput.addEventListener(`input`, () => {
+    validateCheckOut();
+  });
+
+  validateTitle();
+  validatePrice();
+  validateImage(avatarInput);
+  validateImage(imageInput);
+
+  const pageActivation = window.activation.getPageActivationHandlers(elements, loadURL, handleSuccess, handleError);
 
   pageActivation.setInactivePageMode();
 
