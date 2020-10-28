@@ -80,6 +80,8 @@
     document.body.insertAdjacentElement(`afterbegin`, node);
   };
 
+  const pageActivation = window.activation.getPageActivationHandlers(elements, loadURL, handleSuccess, handleError);
+
   const pinFeatures = {
     pinWidth: pageActivation.pinWidth,
     pinHeight: pageActivation.pinHeightActive
@@ -129,8 +131,6 @@
   validatePrice();
   validateImage(avatarInput);
   validateImage(imageInput);
-
-  const pageActivation = window.activation.getPageActivationHandlers(elements, loadURL, handleSuccess, handleError);
 
   pageActivation.setInactivePageMode();
 
