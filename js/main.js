@@ -88,7 +88,7 @@
   const onMainPinClick = window.pinMovement.getPinMovementHandlers(elements, pinFeatures).onMainPinClick;
 
   mainPin.addEventListener(`mousedown`, onMainPinClick);
-  
+
   const checkGuestNumberValidity = window.form.getValidityCheckHandlers(elements).checkGuestNumberValidity;
   const validateTitle = window.form.getValidityCheckHandlers(elements).validateTitle;
   const validateHousingType = window.form.getValidityCheckHandlers(elements).validateHousingType;
