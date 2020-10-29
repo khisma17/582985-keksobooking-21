@@ -82,7 +82,7 @@
     node.textContent = errorMessage;
     document.body.insertAdjacentElement(`afterbegin`, node);
   };
-  
+
   const getPopupHandlers = (popup) => {
     const onPopupEscPress = (evt) => {
       if (evt.key === `Escape`) {
@@ -116,14 +116,6 @@
     document.addEventListener(`click`, getPopupHandlers(errorPopup).onPopupClick);
     errorButton.addEventListener(`click`, getPopupHandlers(errorPopup).onPopupClick);
   };
-
-  const checkGuestNumberValidity = window.form.getValidityCheckHandlers(elements).checkGuestNumberValidity;
-  const validateTitle = window.form.getValidityCheckHandlers(elements).validateTitle;
-  const validateHousingType = window.form.getValidityCheckHandlers(elements).validateHousingType;
-  const validatePrice = window.form.getValidityCheckHandlers(elements).validatePrice;
-  const validateCheckIn = window.form.getValidityCheckHandlers(elements).validateCheckIn;
-  const validateCheckOut = window.form.getValidityCheckHandlers(elements).validateCheckOut;
-  const validateImage = window.form.getValidityCheckHandlers(elements).validateImage;
 
   const pageActivation = window.activation.getPageActivationHandlers(elements, loadURL, handleSuccess, handleError);
 
@@ -170,7 +162,7 @@
   validatePrice();
   validateImage(avatarInput);
   validateImage(imageInput);
-  
+
   pageActivation.setInactivePageMode();
 
   form.addEventListener(`submit`, (evt) => {
