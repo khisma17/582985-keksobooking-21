@@ -58,7 +58,7 @@
 
   const functions = {clearPins, clearCards};
 
-  const renderPins = window.map.getRenderingHandlers(elements, functions).renderPins;
+  const {renderPins} = window.map.getRenderingHandlers(elements, functions);
 
   const updatePins = () => {
     clearPins();
@@ -66,9 +66,7 @@
       renderPins(pins);
       return;
     } else {
-      const sameHousingTypePins = pins.filter((pin) => {
-        return pin.offer.type === housingTypeFilter.value;
-      });
+      const sameHousingTypePins = pins.filter((pin) => pin.offer.type === housingTypeFilter.value);
       renderPins(sameHousingTypePins);
     }
   };
@@ -84,7 +82,7 @@
     node.textContent = errorMessage;
     document.body.insertAdjacentElement(`afterbegin`, node);
   };
-
+  
   const getPopupHandlers = (popup) => {
     const onPopupEscPress = (evt) => {
       if (evt.key === `Escape`) {
@@ -127,6 +125,19 @@
   const validateCheckOut = window.form.getValidityCheckHandlers(elements).validateCheckOut;
   const validateImage = window.form.getValidityCheckHandlers(elements).validateImage;
 
+  const pageActivation = window.activation.getPageActivationHandlers(elements, loadURL, handleSuccess, handleError);
+
+  const pinFeatures = {
+    pinWidth: pageActivation.pinWidth,
+    pinHeight: pageActivation.pinHeightActive
+  };
+
+  const onMainPinClick = window.pinMovement.getPinMovementHandlers(elements, pinFeatures).onMainPinClick;
+
+  mainPin.addEventListener(`mousedown`, onMainPinClick);
+
+  const {checkGuestNumberValidity, validateTitle, validateHousingType, validatePrice, validateCheckIn, validateCheckOut, validateImage} = window.form.getValidityCheckHandlers(elements);
+
   document.addEventListener(`DOMContentLoaded`, () => {
     checkGuestNumberValidity();
   });
@@ -159,9 +170,7 @@
   validatePrice();
   validateImage(avatarInput);
   validateImage(imageInput);
-
-  const pageActivation = window.activation.getPageActivationHandlers(elements, functions, loadURL, handleSuccess, handleError);
-
+  
   pageActivation.setInactivePageMode();
 
   form.addEventListener(`submit`, (evt) => {
