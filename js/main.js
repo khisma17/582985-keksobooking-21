@@ -117,7 +117,7 @@
     errorButton.addEventListener(`click`, getPopupHandlers(errorPopup).onPopupClick);
   };
 
-  const pageActivation = window.activation.getPageActivationHandlers(elements, loadURL, handleSuccess, handleError);
+  const pageActivation = window.activation.getPageActivationHandlers(elements, functions, loadURL, handleSuccess, handleError);
 
   const pinFeatures = {
     pinWidth: pageActivation.pinWidth,
