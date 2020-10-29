@@ -53,7 +53,7 @@
 
   const functions = {clearCards};
 
-  const renderPins = window.map.getRenderingHandlers(elements, functions).renderPins;
+  const {renderPins} = window.map.getRenderingHandlers(elements, functions);
 
   const updatePins = () => {
     clearPins();
@@ -61,9 +61,7 @@
       renderPins(pins);
       return;
     } else {
-      const sameHousingTypePins = pins.filter((pin) => {
-        return pin.offer.type === housingTypeFilter.value;
-      });
+      const sameHousingTypePins = pins.filter((pin) => pin.offer.type === housingTypeFilter.value);
       renderPins(sameHousingTypePins);
     }
   };
@@ -80,13 +78,18 @@
     document.body.insertAdjacentElement(`afterbegin`, node);
   };
 
-  const checkGuestNumberValidity = window.form.getValidityCheckHandlers(elements).checkGuestNumberValidity;
-  const validateTitle = window.form.getValidityCheckHandlers(elements).validateTitle;
-  const validateHousingType = window.form.getValidityCheckHandlers(elements).validateHousingType;
-  const validatePrice = window.form.getValidityCheckHandlers(elements).validatePrice;
-  const validateCheckIn = window.form.getValidityCheckHandlers(elements).validateCheckIn;
-  const validateCheckOut = window.form.getValidityCheckHandlers(elements).validateCheckOut;
-  const validateImage = window.form.getValidityCheckHandlers(elements).validateImage;
+  const pageActivation = window.activation.getPageActivationHandlers(elements, loadURL, handleSuccess, handleError);
+
+  const pinFeatures = {
+    pinWidth: pageActivation.pinWidth,
+    pinHeight: pageActivation.pinHeightActive
+  };
+
+  const onMainPinClick = window.pinMovement.getPinMovementHandlers(elements, pinFeatures).onMainPinClick;
+
+  mainPin.addEventListener(`mousedown`, onMainPinClick);
+
+  const {checkGuestNumberValidity, validateTitle, validateHousingType, validatePrice, validateCheckIn, validateCheckOut, validateImage} = window.form.getValidityCheckHandlers(elements);
 
   document.addEventListener(`DOMContentLoaded`, () => {
     checkGuestNumberValidity();
@@ -120,8 +123,6 @@
   validatePrice();
   validateImage(avatarInput);
   validateImage(imageInput);
-
-  const pageActivation = window.activation.getPageActivationHandlers(elements, loadURL, handleSuccess, handleError);
 
   pageActivation.setInactivePageMode();
 

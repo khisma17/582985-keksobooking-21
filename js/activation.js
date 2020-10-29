@@ -63,7 +63,7 @@
       elements.mainPin.removeEventListener(`keydown`, onInactiveMainPinEnterPress);
     };
 
-    return {setInactivePageMode, pinWidth, pinHeight};
+    return {setInactivePageMode, pinWidth, pinHeight, pinHeightActive};
   };
 
   const activateFilters = (elements) => {

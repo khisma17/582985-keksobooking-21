@@ -2,18 +2,19 @@
 
 (() => {
   const getValidityCheckHandlers = (elements) => {
+    const guestsMismatch = `Выбранное количество гостей не подходит под количество комнат`;
     const checkGuestNumberValidity = () => {
       if (elements.roomsInput.value === `1` && elements.guestsInput.value !== `1`) {
-        elements.guestsInput.setCustomValidity(`Выбранное количество гостей не подходит под количество комнат`);
+        elements.guestsInput.setCustomValidity(guestsMismatch);
         elements.guestsInput.reportValidity();
       } else if (elements.roomsInput.value === `2` && (elements.guestsInput.value === `3` || elements.guestsInput.value === `0`)) {
-        elements.guestsInput.setCustomValidity(`Выбранное количество гостей не подходит под количество комнат`);
+        elements.guestsInput.setCustomValidity(guestsMismatch);
         elements.guestsInput.reportValidity();
       } else if (elements.roomsInput.value === `3` && elements.guestsInput.value === `0`) {
-        elements.guestsInput.setCustomValidity(`Выбранное количество гостей не подходит под количество комнат`);
+        elements.guestsInput.setCustomValidity(guestsMismatch);
         elements.guestsInput.reportValidity();
       } else if (elements.roomsInput.value === `100` && elements.guestsInput.value !== `0`) {
-        elements.guestsInput.setCustomValidity(`Выбранное количество гостей не подходит под количество комнат`);
+        elements.guestsInput.setCustomValidity(guestsMismatch);
         elements.guestsInput.reportValidity();
       } else {
         elements.guestsInput.setCustomValidity(``);
