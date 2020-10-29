@@ -1,11 +1,16 @@
 'use strict';
 
 (() => {
+  const MAIN_MOUSE_BUTTON = 0;
+
   const guestsInput = document.querySelector(`#capacity`);
   const roomsInput = document.querySelector(`#room_number`);
   const mapFilters = document.querySelector(`.map__filters-container`);
   const map = document.querySelector(`.map`);
   const cardTemplate = document.querySelector(`#card`).content.querySelector(`.map__card`);
+  const successfulUploadTemplate = document.querySelector(`#success`).content.querySelector(`.success`);
+  const uploadErrorTemplate = document.querySelector(`#error`).content.querySelector(`.error`);
+  const resetFormButton = document.querySelector(`.ad-form__reset`);
 
   const pinTemplate = document.querySelector(`#pin`).content.querySelector(`.map__pin`);
   const pinsList = document.querySelector(`.map__pins`);
@@ -51,7 +56,7 @@
     });
   };
 
-  const functions = {clearCards};
+  const functions = {clearPins, clearCards};
 
   const renderPins = window.map.getRenderingHandlers(elements, functions).renderPins;
 
@@ -78,6 +83,40 @@
 
     node.textContent = errorMessage;
     document.body.insertAdjacentElement(`afterbegin`, node);
+  };
+
+  const getPopupHandlers = (popup) => {
+    const onPopupEscPress = (evt) => {
+      if (evt.key === `Escape`) {
+        popup.remove();
+      }
+    };
+
+    const onPopupClick = (evt) => {
+      if (evt.button === MAIN_MOUSE_BUTTON) {
+        popup.remove();
+      }
+    };
+
+    return {onPopupEscPress, onPopupClick};
+  };
+
+  const handleSuccessfulUpload = () => {
+    form.reset();
+    pageActivation.setInactivePageMode();
+    const successPopup = successfulUploadTemplate.cloneNode(true);
+    document.querySelector(`main`).appendChild(successPopup);
+    document.addEventListener(`keydown`, getPopupHandlers(successPopup).onPopupEscPress);
+    document.addEventListener(`click`, getPopupHandlers(successPopup).onPopupClick);
+  };
+
+  const handleUploadError = () => {
+    const errorPopup = uploadErrorTemplate.cloneNode(true);
+    document.querySelector(`main`).appendChild(errorPopup);
+    const errorButton = document.querySelector(`.error__button`);
+    document.addEventListener(`keydown`, getPopupHandlers(errorPopup).onPopupEscPress);
+    document.addEventListener(`click`, getPopupHandlers(errorPopup).onPopupClick);
+    errorButton.addEventListener(`click`, getPopupHandlers(errorPopup).onPopupClick);
   };
 
   const checkGuestNumberValidity = window.form.getValidityCheckHandlers(elements).checkGuestNumberValidity;
@@ -121,9 +160,21 @@
   validateImage(avatarInput);
   validateImage(imageInput);
 
-  const pageActivation = window.activation.getPageActivationHandlers(elements, loadURL, handleSuccess, handleError);
+  const pageActivation = window.activation.getPageActivationHandlers(elements, functions, loadURL, handleSuccess, handleError);
 
   pageActivation.setInactivePageMode();
+
+  form.addEventListener(`submit`, (evt) => {
+    window.upload.uploadForm(new FormData(form), handleSuccessfulUpload, handleUploadError);
+    evt.preventDefault();
+  });
+
+  resetFormButton.addEventListener(`click`, (evt) => {
+    if (evt.button === MAIN_MOUSE_BUTTON) {
+      evt.preventDefault();
+      form.reset();
+    }
+  });
 
   window.main = {pageActivation};
 })();
