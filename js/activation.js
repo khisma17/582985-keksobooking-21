@@ -3,7 +3,7 @@
 (() => {
   const MAIN_MOUSE_BUTTON = 0;
 
-  const getPageActivationHandlers = (elements, url, onSuccess, onError) => {
+  const getPageActivationHandlers = (elements, functions, url, onSuccess, onError) => {
     const pinWidth = elements.mainPin.offsetWidth;
     const pinHeight = elements.mainPin.offsetHeight;
 
@@ -19,7 +19,12 @@
     };
 
     const setInactivePageMode = () => {
+      if (!elements.map.classList.contains(`map--faded`)) {
+        elements.map.classList.add(`map--faded`);
+      }
       elements.form.classList.add(`ad-form--disabled`);
+
+      functions.clearPins();
 
       for (let i = 0; i < elements.formFieldsets.length; i += 1) {
         elements.formFieldsets[i].setAttribute(`disabled`, ``);
