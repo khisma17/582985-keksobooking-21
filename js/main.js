@@ -15,6 +15,11 @@
   const pinTemplate = document.querySelector(`#pin`).content.querySelector(`.map__pin`);
   const pinsList = document.querySelector(`.map__pins`);
   const housingTypeFilter = document.querySelector(`#housing-type`);
+  const priceFilter = document.querySelector(`#housing-price`);
+  const roomsNumberFilter = document.querySelector(`#housing-rooms`);
+  const guestsNumberFilter = document.querySelector(`#housing-guests`);
+  const featuresFilter = document.querySelector(`#housing-features`);
+  const featuresInputs = featuresFilter.querySelectorAll(`input`);
 
   const mainPin = document.querySelector(`.map__pin--main`);
   const form = document.querySelector(`.ad-form`);
@@ -30,7 +35,7 @@
   const avatarInput = document.querySelector(`#avatar`);
   const imageInput = document.querySelector(`#images`);
 
-  const elements = {mainPin, map, form, formFieldsets, filtersFieldsets, addressInput, pinTemplate, pinsList, cardTemplate, mapFilters, guestsInput, roomsInput, titleInput, housingTypeInput, priceInput, checkInInput, checkOutInput};
+  const elements = {mainPin, map, form, formFieldsets, filtersFieldsets, addressInput, pinTemplate, pinsList, cardTemplate, mapFilters, guestsInput, roomsInput, titleInput, housingTypeInput, priceInput, checkInInput, checkOutInput, housingTypeFilter, priceFilter, roomsNumberFilter, guestsNumberFilter, featuresInputs};
 
   const loadURL = `https://21.javascript.pages.academy/keksobooking/data`;
 
@@ -62,13 +67,8 @@
 
   const updatePins = () => {
     clearPins();
-    if (housingTypeFilter.value === `any`) {
-      renderPins(pins);
-      return;
-    } else {
-      const sameHousingTypePins = pins.filter((pin) => pin.offer.type === housingTypeFilter.value);
-      renderPins(sameHousingTypePins);
-    }
+    const filteredPins = window.filter.getFilterHandlers(elements, pins);
+    renderPins(filteredPins);
   };
 
   const handleError = (errorMessage) => {
@@ -134,9 +134,9 @@
     checkGuestNumberValidity();
   });
 
-  housingTypeFilter.addEventListener(`input`, () => {
+  filters.addEventListener(`input`, window.debounce(() => {
     updatePins();
-  });
+  }));
 
   guestsInput.addEventListener(`input`, () => {
     checkGuestNumberValidity();
