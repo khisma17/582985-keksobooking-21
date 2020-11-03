@@ -28,7 +28,9 @@
   const checkInInput = document.querySelector(`#timein`);
   const checkOutInput = document.querySelector(`#timeout`);
   const avatarInput = document.querySelector(`#avatar`);
-  const imageInput = document.querySelector(`#images`);
+  const photoInput = document.querySelector(`#images`);
+  const avatarPreview = document.querySelector(`.ad-form-header__preview img`);
+  const photoPreviewContainer = document.querySelector(`.ad-form__photo`);
 
   const elements = {mainPin, map, form, formFieldsets, filtersFieldsets, addressInput, pinTemplate, pinsList, cardTemplate, mapFilters, guestsInput, roomsInput, titleInput, housingTypeInput, priceInput, checkInInput, checkOutInput};
 
@@ -161,7 +163,19 @@
   validateTitle();
   validatePrice();
   validateImage(avatarInput);
-  validateImage(imageInput);
+  validateImage(photoInput);
+
+  window.imagePreview.getImagePreview(avatarInput, avatarPreview);
+
+  const photoPreview = document.createElement(`img`);
+  photoPreview.alt = `Фотография жилья`;
+  photoPreview.style.width = `100%`;
+
+  photoInput.addEventListener(`change`, () => {
+    photoPreviewContainer.appendChild(photoPreview);
+  });
+
+  window.imagePreview.getImagePreview(photoInput, photoPreview);
 
   pageActivation.setInactivePageMode();
 
