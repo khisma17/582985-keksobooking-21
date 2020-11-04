@@ -14,6 +14,9 @@
 
     const mainPinY = elements.mainPin.offsetTop + pinHeightActive;
 
+    const mainPinInitialX = elements.mainPin.offsetLeft;
+    const mainPinInitialY = elements.mainPin.offsetTop;
+
     const setAddress = (x, y) => {
       elements.addressInput.setAttribute(`value`, `${Math.round(x)}, ${Math.round(y)}`);
     };
@@ -25,6 +28,7 @@
       elements.form.classList.add(`ad-form--disabled`);
 
       functions.clearPins();
+      functions.clearCards();
 
       for (let i = 0; i < elements.formFieldsets.length; i += 1) {
         elements.formFieldsets[i].setAttribute(`disabled`, ``);
@@ -35,6 +39,9 @@
       }
 
       setAddress(mainPinX, mainPinInactiveY);
+
+      elements.mainPin.style.left = `${mainPinInitialX}px`;
+      elements.mainPin.style.top = `${mainPinInitialY}px`;
 
       elements.mainPin.addEventListener(`mousedown`, onInactiveMainPinClick);
 

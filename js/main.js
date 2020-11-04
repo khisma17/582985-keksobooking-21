@@ -59,6 +59,10 @@
     cards.forEach((element) => {
       element.remove();
     });
+    const pinElements = pinsList.querySelectorAll(`.map__pin`);
+    for (let i = 1; i < pinElements.length; i += 1) {
+      pinElements[i].classList.remove(`map__pin--active`);
+    }
   };
 
   const functions = {clearPins, clearCards};
@@ -101,6 +105,7 @@
 
   const handleSuccessfulUpload = () => {
     form.reset();
+    filters.reset();
     pageActivation.setInactivePageMode();
     const successPopup = successfulUploadTemplate.cloneNode(true);
     document.querySelector(`main`).appendChild(successPopup);
@@ -134,9 +139,7 @@
     checkGuestNumberValidity();
   });
 
-  filters.addEventListener(`input`, window.debounce(() => {
-    updatePins();
-  }));
+  filters.addEventListener(`input`, window.debounce(updatePins));
 
   guestsInput.addEventListener(`input`, () => {
     checkGuestNumberValidity();
@@ -174,6 +177,8 @@
     if (evt.button === MAIN_MOUSE_BUTTON) {
       evt.preventDefault();
       form.reset();
+      filters.reset();
+      pageActivation.setInactivePageMode();
     }
   });
 

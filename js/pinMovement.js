@@ -28,8 +28,8 @@
     };
 
     const setAddress = (draggable) => {
-      addressValue.x = draggable.offsetLeft + pinWidth / 2;
-      addressValue.y = draggable.offsetTop + pinHeight;
+      addressValue.x = Math.round(draggable.offsetLeft + pinWidth / 2);
+      addressValue.y = Math.round(draggable.offsetTop + pinHeight);
       elements.addressInput.value = `${addressValue.x}, ${addressValue.y}`;
     };
 

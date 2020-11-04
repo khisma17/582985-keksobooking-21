@@ -18,6 +18,7 @@
           if (evt.button === MAIN_MOUSE_BUTTON) {
             functions.clearCards();
             renderCards(pins[i]);
+            pinElement.classList.add(`map__pin--active`);
           }
         };
 
