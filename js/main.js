@@ -11,6 +11,7 @@
   const successfulUploadTemplate = document.querySelector(`#success`).content.querySelector(`.success`);
   const uploadErrorTemplate = document.querySelector(`#error`).content.querySelector(`.error`);
   const resetFormButton = document.querySelector(`.ad-form__reset`);
+  const sendFormButton = document.querySelector(`.ad-form__submit`);
 
   const pinTemplate = document.querySelector(`#pin`).content.querySelector(`.map__pin`);
   const pinsList = document.querySelector(`.map__pins`);
@@ -36,6 +37,8 @@
   const imageInput = document.querySelector(`#images`);
 
   const elements = {mainPin, map, form, formFieldsets, filtersFieldsets, addressInput, pinTemplate, pinsList, cardTemplate, mapFilters, guestsInput, roomsInput, titleInput, housingTypeInput, priceInput, checkInInput, checkOutInput, housingTypeFilter, priceFilter, roomsNumberFilter, guestsNumberFilter, featuresInputs};
+
+  const validatedInputs = [titleInput, priceInput, guestsInput];
 
   const loadURL = `https://21.javascript.pages.academy/keksobooking/data`;
 
@@ -69,9 +72,11 @@
 
   const {renderPins} = window.map.getRenderingHandlers(elements, functions);
 
+  const filterPins = window.filter.getFilterHandlers(elements);
+
   const updatePins = () => {
     clearPins();
-    const filteredPins = window.filter.getFilterHandlers(elements, pins);
+    const filteredPins = filterPins(pins);
     renderPins(filteredPins);
   };
 
@@ -171,6 +176,24 @@
   form.addEventListener(`submit`, (evt) => {
     window.upload.uploadForm(new FormData(form), handleSuccessfulUpload, handleUploadError);
     evt.preventDefault();
+  });
+
+  sendFormButton.addEventListener(`click`, () => {
+    validatedInputs.forEach((input) => {
+      if (!input.checkValidity()) {
+        input.style = `box-shadow: 0 0 2px 2px red;`;
+      } else {
+        input.style = ``;
+      }
+    });
+  });
+
+  validatedInputs.forEach((input) => {
+    input.addEventListener(`input`, () => {
+      if (input.checkValidity()) {
+        input.style = ``;
+      }
+    });
   });
 
   resetFormButton.addEventListener(`click`, (evt) => {
