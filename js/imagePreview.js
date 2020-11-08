@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 (() => {
   const FILE_TYPES = [`gif`, `jpg`, `jpeg`, `png`];

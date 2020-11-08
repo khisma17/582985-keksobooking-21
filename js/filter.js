@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 (() => {
   const PRICE_FILTER_LOW = 10000;

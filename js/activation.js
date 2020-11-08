@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 const MAIN_MOUSE_BUTTON = 0;
 
@@ -6,7 +6,9 @@ const getPageActivationHandlers = (elements, functions, url, onSuccess, onError)
   const pinWidth = elements.mainPin.offsetWidth;
   const pinHeight = elements.mainPin.offsetHeight;
 
-  const pinHeightActive = pinHeight + 22;
+  const pinPointerHeight = 22;
+
+  const pinHeightActive = pinHeight + pinPointerHeight;
 
   const mainPinX = elements.mainPin.offsetLeft + pinWidth / 2;
   const mainPinInactiveY = elements.mainPin.offsetTop + pinHeight / 2;

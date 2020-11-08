@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 const MAIN_MOUSE_BUTTON = 0;
 
@@ -98,12 +98,16 @@ const getPopupHandlers = (popup) => {
   const onPopupEscPress = (evt) => {
     if (evt.key === `Escape`) {
       popup.remove();
+      document.removeEventListener(`keydown`, getPopupHandlers(popup).onPopupEscPress);
+      document.removeEventListener(`click`, getPopupHandlers(popup).onPopupClick);
     }
   };
 
   const onPopupClick = (evt) => {
     if (evt.button === MAIN_MOUSE_BUTTON) {
       popup.remove();
+      document.removeEventListener(`click`, getPopupHandlers(popup).onPopupClick);
+      document.removeEventListener(`keydown`, getPopupHandlers(popup).onPopupEscPress);
     }
   };
 
@@ -196,19 +200,13 @@ form.addEventListener(`submit`, (evt) => {
 
 sendFormButton.addEventListener(`click`, () => {
   validatedInputs.forEach((input) => {
-    if (!input.checkValidity()) {
-      input.style = `box-shadow: 0 0 2px 2px red;`;
-    } else {
-      input.style = ``;
-    }
+    input.style = !input.checkValidity() ? `box-shadow: 0 0 2px 2px red;` : ``;
   });
 });
 
 validatedInputs.forEach((input) => {
   input.addEventListener(`input`, () => {
-    if (input.checkValidity()) {
-      input.style = ``;
-    }
+    input.style = input.checkValidity() ? `` : `box-shadow: 0 0 2px 2px red`;
   });
 });
 

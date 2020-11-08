@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 const TIMEOUT_IN_MS = 10000;
 

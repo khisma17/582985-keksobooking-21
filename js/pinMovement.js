@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 const MAIN_MOUSE_BUTTON = 0;
 

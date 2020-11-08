@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 const uploadURL = `https://21.javascript.pages.academy/keksobooking`;
 

@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 const createPin = (pinTemplate, pinData) => {
   const pinElement = pinTemplate.cloneNode(true);

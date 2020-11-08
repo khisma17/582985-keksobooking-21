@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 const OFFER_TYPES_MAPPING = {
   flat: `Квартира`,

@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 const getRandomValueFromRange = (minimumValue, maximumValue) => Math.floor(Math.random() * (maximumValue - minimumValue + 1) + minimumValue);
 

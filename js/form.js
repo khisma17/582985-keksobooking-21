@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 const getValidityCheckHandlers = (elements) => {
   const guestsMismatch = `Выбранное количество гостей не подходит под количество комнат`;
