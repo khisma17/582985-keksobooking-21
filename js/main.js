@@ -37,7 +37,10 @@ const photoInput = document.querySelector(`#images`);
 const avatarPreview = document.querySelector(`.ad-form-header__preview img`);
 const photoPreviewContainer = document.querySelector(`.ad-form__photo`);
 
-const elements = {mainPin, map, form, formFieldsets, filtersFieldsets, addressInput, pinTemplate, pinsList, cardTemplate, mapFilters, guestsInput, roomsInput, titleInput, housingTypeInput, priceInput, checkInInput, checkOutInput, housingTypeFilter, priceFilter, roomsNumberFilter, guestsNumberFilter, featuresInputs};
+const elements = {mainPin, map, form, formFieldsets, filtersFieldsets, addressInput,
+  pinTemplate, pinsList, cardTemplate, mapFilters,
+  guestsInput, roomsInput, titleInput, housingTypeInput, priceInput, checkInInput, checkOutInput,
+  housingTypeFilter, priceFilter, roomsNumberFilter, guestsNumberFilter, featuresInputs};
 
 const validatedInputs = [titleInput, priceInput, guestsInput];
 
@@ -64,9 +67,12 @@ const clearCards = () => {
     element.remove();
   });
   const pinElements = pinsList.querySelectorAll(`.map__pin`);
-  for (let i = 1; i < pinElements.length; i += 1) {
-    pinElements[i].classList.remove(`map__pin--active`);
-  }
+  pinElements.forEach((element) => {
+    element.classList.remove(`map__pin--active`);
+  });
+  // for (let i = 1; i < pinElements.length; i += 1) {
+  //   pinElements[i].classList.remove(`map__pin--active`);
+  // }
 };
 
 const functions = {clearPins, clearCards};
@@ -144,41 +150,27 @@ const onMainPinClick = window.pinMovement.getPinMovementHandlers(elements, pinFe
 
 mainPin.addEventListener(`mousedown`, onMainPinClick);
 
-const {checkGuestNumberValidity, validateTitle, validateHousingType, validatePrice, validateCheckIn, validateCheckOut, validateImage} = window.form.getValidityCheckHandlers(elements);
+const {validateGuestsNumber, setTitleConstraints, setHousingTypeConstraints, setPriceConstraints, setCheckInConstraints, setCheckOutConstraints, setImageConstraints} = window.form.getValidityCheckHandlers(elements);
 
-document.addEventListener(`DOMContentLoaded`, () => {
-  checkGuestNumberValidity();
-});
+document.addEventListener(`DOMContentLoaded`, validateGuestsNumber);
 
-housingTypeFilter.addEventListener(`input`, () => {
-  updatePins();
-});
+housingTypeFilter.addEventListener(`input`, updatePins);
 
 filters.addEventListener(`input`, window.debounce(updatePins));
-guestsInput.addEventListener(`input`, () => {
-  checkGuestNumberValidity();
-});
+guestsInput.addEventListener(`input`, validateGuestsNumber);
 
-roomsInput.addEventListener(`input`, () => {
-  checkGuestNumberValidity();
-});
+roomsInput.addEventListener(`input`, validateGuestsNumber);
 
-housingTypeInput.addEventListener(`input`, () => {
-  validateHousingType();
-});
+housingTypeInput.addEventListener(`input`, setHousingTypeConstraints);
 
-checkInInput.addEventListener(`input`, () => {
-  validateCheckIn();
-});
+checkInInput.addEventListener(`input`, setCheckInConstraints);
 
-checkOutInput.addEventListener(`input`, () => {
-  validateCheckOut();
-});
+checkOutInput.addEventListener(`input`, setCheckOutConstraints);
 
-validateTitle();
-validatePrice();
-validateImage(avatarInput);
-validateImage(photoInput);
+setTitleConstraints();
+setPriceConstraints();
+setImageConstraints(avatarInput);
+setImageConstraints(photoInput);
 
 window.imagePreview.getImagePreview(avatarInput, avatarPreview);
 

@@ -1,6 +1,6 @@
 "use strict";
 
-const OFFER_TYPES_MAPPING = {
+const offerTypesMapping = {
   flat: `Квартира`,
   bungalow: `Бунгало`,
   house: `Дом`,
@@ -74,7 +74,7 @@ const createCard = (cardTemplate, cardData) => {
   cardElementTitle.textContent = cardData.offer.title;
   cardElementAddress.textContent = cardData.offer.address;
   cardElementPrice.textContent = `${cardData.offer.price}₽/ночь`;
-  cardElementType.textContent = OFFER_TYPES_MAPPING[offerType];
+  cardElementType.textContent = offerTypesMapping[offerType];
 
   const properRoomsName = getProperWordFormRooms(cardData.offer.rooms, textMapping);
   const properGuestsName = getProperWordFormGuests(cardData.offer.guests, textMapping);
@@ -83,10 +83,15 @@ const createCard = (cardTemplate, cardData) => {
   cardElementTime.textContent = `Заезд после ${cardData.offer.checkin}, выезд до ${cardData.offer.checkout}`;
 
   cardElementFeatures.innerHTML = ``;
-  for (let i = 0; i < cardData.offer.features.length; i += 1) {
-    const featuresElement = createFeaturesElement(cardData, i);
+  cardData.offer.features.forEach((feature, index) => {
+    const featuresElement = createFeaturesElement(cardData, index);
     cardElementFeatures.appendChild(featuresElement);
-  }
+  });
+
+  // for (let i = 0; i < cardData.offer.features.length; i += 1) {
+  //   const featuresElement = createFeaturesElement(cardData, i);
+  //   cardElementFeatures.appendChild(featuresElement);
+  // }
 
   cardElementDescription.textContent = cardData.offer.description;
 

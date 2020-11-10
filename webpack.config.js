@@ -3,7 +3,6 @@ const path = require("path");
 
 module.exports = {
   entry: [
-    "./js/helpers.js",
     "./js/debounce.js",
     "./js/filter.js",
     "./js/load.js",

@@ -36,7 +36,11 @@
           return features.every(checkFeature);
         };
 
-        const meetConditions = meetHousingTypeCondition(elements.housingTypeFilter) && meetPriceCondition(elements.priceFilter) && meetRoomsNumberCondition(elements.roomsNumberFilter) && meetGuestsNumberCondition(elements.guestsNumberFilter) && meetFeaturesCondition(featuresInputsArray);
+        const meetConditions = meetHousingTypeCondition(elements.housingTypeFilter)
+        && meetPriceCondition(elements.priceFilter)
+        && meetRoomsNumberCondition(elements.roomsNumberFilter)
+        && meetGuestsNumberCondition(elements.guestsNumberFilter)
+        && meetFeaturesCondition(featuresInputsArray);
 
         if (meetConditions) {
           filteredPins.push(pin);

@@ -2,7 +2,7 @@
 
 const getValidityCheckHandlers = (elements) => {
   const guestsMismatch = `Выбранное количество гостей не подходит под количество комнат`;
-  const checkGuestNumberValidity = () => {
+  const validateGuestsNumber = () => {
     if (elements.roomsInput.value === `1` && elements.guestsInput.value !== `1`) {
       elements.guestsInput.setCustomValidity(guestsMismatch);
       elements.guestsInput.reportValidity();
@@ -21,13 +21,13 @@ const getValidityCheckHandlers = (elements) => {
     }
   };
 
-  const validateTitle = () => {
+  const setTitleConstraints = () => {
     elements.titleInput.required = true;
     elements.titleInput.setAttribute(`minlength`, 30);
     elements.titleInput.setAttribute(`maxlength`, 100);
   };
 
-  const validateHousingType = () => {
+  const setHousingTypeConstraints = () => {
     switch (elements.housingTypeInput.value) {
       case `bungalow`:
         elements.priceInput.setAttribute(`min`, 0);
@@ -47,24 +47,24 @@ const getValidityCheckHandlers = (elements) => {
     }
   };
 
-  const validatePrice = () => {
+  const setPriceConstraints = () => {
     elements.priceInput.required = true;
     elements.priceInput.setAttribute(`max`, 1000000);
   };
 
-  const validateCheckIn = () => {
+  const setCheckInConstraints = () => {
     elements.checkOutInput.value = elements.checkInInput.value;
   };
 
-  const validateCheckOut = () => {
+  const setCheckOutConstraints = () => {
     elements.checkInInput.value = elements.checkOutInput.value;
   };
 
-  const validateImage = (input) => {
+  const setImageConstraints = (input) => {
     input.setAttribute(`accept`, `image/*`);
   };
 
-  return {checkGuestNumberValidity, validateTitle, validateHousingType, validatePrice, validateCheckIn, validateCheckOut, validateImage};
+  return {validateGuestsNumber, setTitleConstraints, setHousingTypeConstraints, setPriceConstraints, setCheckInConstraints, setCheckOutConstraints, setImageConstraints};
 };
 
 window.form = {getValidityCheckHandlers};

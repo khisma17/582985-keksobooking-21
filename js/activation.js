@@ -1,14 +1,13 @@
 "use strict";
 
 const MAIN_MOUSE_BUTTON = 0;
+const PIN_POINTER_HEIGHT = 22;
 
 const getPageActivationHandlers = (elements, functions, url, onSuccess, onError) => {
   const pinWidth = elements.mainPin.offsetWidth;
   const pinHeight = elements.mainPin.offsetHeight;
 
-  const pinPointerHeight = 22;
-
-  const pinHeightActive = pinHeight + pinPointerHeight;
+  const pinHeightActive = pinHeight + PIN_POINTER_HEIGHT;
 
   const mainPinX = elements.mainPin.offsetLeft + pinWidth / 2;
   const mainPinInactiveY = elements.mainPin.offsetTop + pinHeight / 2;
@@ -31,13 +30,21 @@ const getPageActivationHandlers = (elements, functions, url, onSuccess, onError)
     functions.clearPins();
     functions.clearCards();
 
-    for (let i = 0; i < elements.formFieldsets.length; i += 1) {
-      elements.formFieldsets[i].setAttribute(`disabled`, ``);
-    }
+    elements.formFieldsets.forEach((fieldset) => {
+      fieldset.setAttribute(`disabled`, ``);
+    });
 
-    for (let i = 0; i < elements.filtersFieldsets.length; i += 1) {
-      elements.filtersFieldsets[i].setAttribute(`disabled`, ``);
-    }
+    // for (let i = 0; i < elements.formFieldsets.length; i += 1) {
+    //   elements.formFieldsets[i].setAttribute(`disabled`, ``);
+    // }
+
+    elements.filtersFieldsets.forEach((fieldset) => {
+      fieldset.setAttribute(`disabled`, ``);
+    });
+
+    // for (let i = 0; i < elements.filtersFieldsets.length; i += 1) {
+    //   elements.filtersFieldsets[i].setAttribute(`disabled`, ``);
+    // }
 
     elements.mainPin.style.left = `${mainPinInitialX}px`;
     elements.mainPin.style.top = `${mainPinInitialY}px`;
@@ -47,6 +54,25 @@ const getPageActivationHandlers = (elements, functions, url, onSuccess, onError)
     elements.mainPin.addEventListener(`mousedown`, onInactiveMainPinClick);
 
     elements.mainPin.addEventListener(`keydown`, onInactiveMainPinEnterPress);
+  };
+
+  const activatePage = () => {
+    elements.map.classList.remove(`map--faded`);
+    elements.form.classList.remove(`ad-form--disabled`);
+
+    elements.formFieldsets.forEach((fieldset) => {
+      fieldset.removeAttribute(`disabled`);
+    });
+
+    // for (let i = 0; i < elements.formFieldsets.length; i += 1) {
+    //   elements.formFieldsets[i].removeAttribute(`disabled`);
+    // }
+
+    setAddress(mainPinX, mainPinY);
+    window.load.loadData(url, onSuccess, onError);
+
+    elements.mainPin.removeEventListener(`mousedown`, onInactiveMainPinClick);
+    elements.mainPin.removeEventListener(`keydown`, onInactiveMainPinEnterPress);
   };
 
   const onInactiveMainPinClick = (evt) => {
@@ -61,28 +87,17 @@ const getPageActivationHandlers = (elements, functions, url, onSuccess, onError)
     }
   };
 
-  const activatePage = () => {
-    elements.map.classList.remove(`map--faded`);
-    elements.form.classList.remove(`ad-form--disabled`);
-
-    for (let i = 0; i < elements.formFieldsets.length; i += 1) {
-      elements.formFieldsets[i].removeAttribute(`disabled`);
-    }
-
-    setAddress(mainPinX, mainPinY);
-    window.load.loadData(url, onSuccess, onError);
-
-    elements.mainPin.removeEventListener(`mousedown`, onInactiveMainPinClick);
-    elements.mainPin.removeEventListener(`keydown`, onInactiveMainPinEnterPress);
-  };
-
   return {setInactivePageMode, pinWidth, pinHeight, pinHeightActive};
 };
 
 const activateFilters = (elements) => {
-  for (let i = 0; i < elements.filtersFieldsets.length; i += 1) {
-    elements.filtersFieldsets[i].removeAttribute(`disabled`);
-  }
+  elements.filtersFieldsets.forEach((fieldset) => {
+    fieldset.removeAttribute(`disabled`);
+  });
+
+  // for (let i = 0; i < elements.filtersFieldsets.length; i += 1) {
+  //   elements.filtersFieldsets[i].removeAttribute(`disabled`);
+  // }
 };
 
 window.activation = {getPageActivationHandlers, activateFilters};

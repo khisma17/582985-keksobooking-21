@@ -3,6 +3,10 @@
 const MAIN_MOUSE_BUTTON = 0;
 
 const getPinMovementHandlers = (elements, pinFeatures) => {
+  const LEFT_BORDER = 0;
+  const TOP_BORDER = 130;
+  const BOTTOM_BORDER = 630;
+
   let pointerPosition = {
     left: null,
     top: null
@@ -11,10 +15,7 @@ const getPinMovementHandlers = (elements, pinFeatures) => {
   const pinWidth = pinFeatures.pinWidth;
   const pinHeight = pinFeatures.pinHeight;
 
-  const leftBorder = 0;
   const rightBorder = elements.map.offsetWidth;
-  const topBorder = 130;
-  const bottomBorder = 630;
 
   let addressValue = {
     x: null,
@@ -22,8 +23,8 @@ const getPinMovementHandlers = (elements, pinFeatures) => {
   };
 
   const moveTo = (evt, draggable) => {
-    draggable.style.left = `${Math.max(leftBorder - pinWidth / 2, Math.min(evt.clientX - pointerPosition.left, rightBorder - pinWidth / 2))}px`;
-    draggable.style.top = `${Math.max(topBorder - pinHeight, Math.min(evt.clientY - pointerPosition.top, bottomBorder - pinHeight))}px`;
+    draggable.style.left = `${Math.max(LEFT_BORDER - pinWidth / 2, Math.min(evt.clientX - pointerPosition.left, rightBorder - pinWidth / 2))}px`;
+    draggable.style.top = `${Math.max(TOP_BORDER - pinHeight, Math.min(evt.clientY - pointerPosition.top, BOTTOM_BORDER - pinHeight))}px`;
   };
 
   const setAddress = (draggable) => {
