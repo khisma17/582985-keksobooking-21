@@ -1,5 +1,18 @@
 "use strict";
 
+const PriceConstraints = {
+  MINIMUM: 0,
+  FLAT_MINIMUM: 1000,
+  HOUSE_MINIMUM: 5000,
+  PALACE_MINIMUM: 10000,
+  MAXIMUM: 1000000
+};
+
+const TitleLengthConstraints = {
+  MINIMUM: 30,
+  MAXIMUM: 100
+};
+
 const getValidityCheckHandlers = (elements) => {
   const guestsMismatch = `Выбранное количество гостей не подходит под количество комнат`;
   const validateGuestsNumber = () => {
@@ -23,33 +36,33 @@ const getValidityCheckHandlers = (elements) => {
 
   const setTitleConstraints = () => {
     elements.titleInput.required = true;
-    elements.titleInput.setAttribute(`minlength`, 30);
-    elements.titleInput.setAttribute(`maxlength`, 100);
+    elements.titleInput.setAttribute(`minlength`, String(TitleLengthConstraints.MINIMUM));
+    elements.titleInput.setAttribute(`maxlength`, String(TitleLengthConstraints.MAXIMUM));
   };
 
   const setHousingTypeConstraints = () => {
     switch (elements.housingTypeInput.value) {
       case `bungalow`:
-        elements.priceInput.setAttribute(`min`, 0);
-        elements.priceInput.setAttribute(`placeholder`, 0);
+        elements.priceInput.setAttribute(`min`, String(PriceConstraints.MINIMUM));
+        elements.priceInput.setAttribute(`placeholder`, String(PriceConstraints.MINIMUM));
         break;
       case `flat`:
-        elements.priceInput.setAttribute(`min`, 1000);
-        elements.priceInput.setAttribute(`placeholder`, 1000);
+        elements.priceInput.setAttribute(`min`, String(PriceConstraints.FLAT_MINIMUM));
+        elements.priceInput.setAttribute(`placeholder`, String(PriceConstraints.FLAT_MINIMUM));
         break;
       case `house`:
-        elements.priceInput.setAttribute(`min`, 5000);
-        elements.priceInput.setAttribute(`placeholder`, 5000);
+        elements.priceInput.setAttribute(`min`, String(PriceConstraints.HOUSE_MINIMUM));
+        elements.priceInput.setAttribute(`placeholder`, String(PriceConstraints.HOUSE_MINIMUM));
         break;
       case `palace`:
-        elements.priceInput.setAttribute(`min`, 10000);
-        elements.priceInput.setAttribute(`placeholder`, 10000);
+        elements.priceInput.setAttribute(`min`, String(PriceConstraints.PALACE_MINIMUM));
+        elements.priceInput.setAttribute(`placeholder`, String(PriceConstraints.PALACE_MINIMUM));
     }
   };
 
   const setPriceConstraints = () => {
     elements.priceInput.required = true;
-    elements.priceInput.setAttribute(`max`, 1000000);
+    elements.priceInput.setAttribute(`max`, String(PriceConstraints.MAXIMUM));
   };
 
   const setCheckInConstraints = () => {

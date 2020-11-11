@@ -3,7 +3,7 @@
 const MAIN_MOUSE_BUTTON = 0;
 const PIN_POINTER_HEIGHT = 22;
 
-const getPageActivationHandlers = (elements, functions, url, onSuccess, onError) => {
+const getPageActivationHandlers = (elements, functions, onLoad, onError) => {
   const pinWidth = elements.mainPin.offsetWidth;
   const pinHeight = elements.mainPin.offsetHeight;
 
@@ -34,17 +34,9 @@ const getPageActivationHandlers = (elements, functions, url, onSuccess, onError)
       fieldset.setAttribute(`disabled`, ``);
     });
 
-    // for (let i = 0; i < elements.formFieldsets.length; i += 1) {
-    //   elements.formFieldsets[i].setAttribute(`disabled`, ``);
-    // }
-
     elements.filtersFieldsets.forEach((fieldset) => {
       fieldset.setAttribute(`disabled`, ``);
     });
-
-    // for (let i = 0; i < elements.filtersFieldsets.length; i += 1) {
-    //   elements.filtersFieldsets[i].setAttribute(`disabled`, ``);
-    // }
 
     elements.mainPin.style.left = `${mainPinInitialX}px`;
     elements.mainPin.style.top = `${mainPinInitialY}px`;
@@ -64,12 +56,8 @@ const getPageActivationHandlers = (elements, functions, url, onSuccess, onError)
       fieldset.removeAttribute(`disabled`);
     });
 
-    // for (let i = 0; i < elements.formFieldsets.length; i += 1) {
-    //   elements.formFieldsets[i].removeAttribute(`disabled`);
-    // }
-
     setAddress(mainPinX, mainPinY);
-    window.load.loadData(url, onSuccess, onError);
+    window.backend.loadData(onLoad, onError);
 
     elements.mainPin.removeEventListener(`mousedown`, onInactiveMainPinClick);
     elements.mainPin.removeEventListener(`keydown`, onInactiveMainPinEnterPress);
@@ -94,10 +82,6 @@ const activateFilters = (elements) => {
   elements.filtersFieldsets.forEach((fieldset) => {
     fieldset.removeAttribute(`disabled`);
   });
-
-  // for (let i = 0; i < elements.filtersFieldsets.length; i += 1) {
-  //   elements.filtersFieldsets[i].removeAttribute(`disabled`);
-  // }
 };
 
 window.activation = {getPageActivationHandlers, activateFilters};

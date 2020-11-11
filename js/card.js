@@ -88,11 +88,6 @@ const createCard = (cardTemplate, cardData) => {
     cardElementFeatures.appendChild(featuresElement);
   });
 
-  // for (let i = 0; i < cardData.offer.features.length; i += 1) {
-  //   const featuresElement = createFeaturesElement(cardData, i);
-  //   cardElementFeatures.appendChild(featuresElement);
-  // }
-
   cardElementDescription.textContent = cardData.offer.description;
 
   cardElementPhotos.innerHTML = ``;
@@ -101,7 +96,7 @@ const createCard = (cardTemplate, cardData) => {
     cardElementPhotos.appendChild(photosElement);
   }
 
-  cardElementAvatar.setAttribute(`src`, cardData.author.avatar);
+  cardElementAvatar.setAttribute(`src`, String(cardData.author.avatar));
 
   return cardElement;
 };

@@ -5,9 +5,8 @@ module.exports = {
   entry: [
     "./js/debounce.js",
     "./js/filter.js",
-    "./js/load.js",
+    "./js/backend.js",
     "./js/imagePreview.js",
-    "./js/upload.js",
     "./js/card.js",
     "./js/form.js",
     "./js/activation.js",

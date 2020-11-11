@@ -9,7 +9,7 @@
   const getFilterHandlers = (elements) => {
     const featuresInputsArray = Array.from(elements.featuresInputs);
 
-    const filterPins = (pins) => {
+    return (pins) => {
       const filteredPins = [];
 
       for (let i = 0; i < pins.length; i += 1) {
@@ -51,8 +51,6 @@
       }
       return filteredPins;
     };
-
-    return filterPins;
   };
 
   window.filter = {getFilterHandlers};

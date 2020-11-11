@@ -44,8 +44,6 @@ const elements = {mainPin, map, form, formFieldsets, filtersFieldsets, addressIn
 
 const validatedInputs = [titleInput, priceInput, guestsInput];
 
-const loadURL = `https://21.javascript.pages.academy/keksobooking/data`;
-
 let pins = [];
 
 const handleSuccess = (data) => {
@@ -70,9 +68,6 @@ const clearCards = () => {
   pinElements.forEach((element) => {
     element.classList.remove(`map__pin--active`);
   });
-  // for (let i = 1; i < pinElements.length; i += 1) {
-  //   pinElements[i].classList.remove(`map__pin--active`);
-  // }
 };
 
 const functions = {clearPins, clearCards};
@@ -139,7 +134,7 @@ const handleUploadError = () => {
   errorButton.addEventListener(`click`, getPopupHandlers(errorPopup).onPopupClick);
 };
 
-const pageActivation = window.activation.getPageActivationHandlers(elements, functions, loadURL, handleSuccess, handleError);
+const pageActivation = window.activation.getPageActivationHandlers(elements, functions, handleSuccess, handleError);
 
 const pinFeatures = {
   pinWidth: pageActivation.pinWidth,
@@ -186,7 +181,7 @@ window.imagePreview.getImagePreview(photoInput, photoPreview);
 pageActivation.setInactivePageMode();
 
 form.addEventListener(`submit`, (evt) => {
-  window.upload.uploadForm(new FormData(form), handleSuccessfulUpload, handleUploadError);
+  window.backend.uploadForm(new FormData(form), handleSuccessfulUpload, handleUploadError);
   evt.preventDefault();
 });
 
